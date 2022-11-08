@@ -47,10 +47,10 @@ class ShopDataSyncServiceTest extends TestCase
             ->for($user)
             ->create([
                 'name' => 'Test',
-                'url' => env('SW6_CUSTOMER_URL'),
+                'url' => env('SW6_CUSTOMER_URL', 'http://localhost'),
                 'credentials' => [
-                    'api_key' => env('SW6_CLIENT_ID'),
-                    'api_secret' => env('SW6_CLIENT_SECRET'),
+                    'api_key' => env('SW6_CLIENT_ID', 'my-client-id'),
+                    'api_secret' => env('SW6_CLIENT_SECRET', 'my-client-secret'),
                 ],
             ]);
 
