@@ -15,7 +15,7 @@ class ShopDataSyncService
             'name' => $entityName,
         ]);
 
-        $element = $collection->first();
+        $element = $collection?->first();
 
         if (! $element) {
             throw new ShopSyncFailedException("First Element for $entityName is null", 419);
