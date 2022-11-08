@@ -1458,22 +1458,22 @@
         },
         {
             "name": "inertiajs/inertia-laravel",
-            "version": "v0.6.3",
+            "version": "v0.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inertiajs/inertia-laravel.git",
-                "reference": "540b953ec383364264f9bd633849db16560a4461"
+                "reference": "b00fe8cf741766b41de69978f9e90ee6d1470d36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/540b953ec383364264f9bd633849db16560a4461",
-                "reference": "540b953ec383364264f9bd633849db16560a4461",
+                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/b00fe8cf741766b41de69978f9e90ee6d1470d36",
+                "reference": "b00fe8cf741766b41de69978f9e90ee6d1470d36",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "laravel/framework": "^6.0|^7.0|^8.74|^9.0",
-                "php": "^7.2|~8.0.0|~8.1.0"
+                "php": "^7.2|~8.0.0|~8.1.0|~8.2.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.3.3",
@@ -1515,7 +1515,7 @@
             ],
             "support": {
                 "issues": "https://github.com/inertiajs/inertia-laravel/issues",
-                "source": "https://github.com/inertiajs/inertia-laravel/tree/v0.6.3"
+                "source": "https://github.com/inertiajs/inertia-laravel/tree/v0.6.4"
             },
             "funding": [
                 {
@@ -1523,7 +1523,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-06-27T23:21:15+00:00"
+            "time": "2022-11-08T12:44:02+00:00"
         },
         {
             "name": "jaybizzle/crawler-detect",
@@ -3019,16 +3019,16 @@
         },
         {
             "name": "mennen-online/shopware6-api-connector",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mennen-online/shopware6-api-connector.git",
-                "reference": "b322ab49c54f2c718cf67c64a75cc5956fbe75fd"
+                "reference": "f78c429032060df4c7ed0a6ad67983390d745d15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mennen-online/shopware6-api-connector/zipball/b322ab49c54f2c718cf67c64a75cc5956fbe75fd",
-                "reference": "b322ab49c54f2c718cf67c64a75cc5956fbe75fd",
+                "url": "https://api.github.com/repos/mennen-online/shopware6-api-connector/zipball/f78c429032060df4c7ed0a6ad67983390d745d15",
+                "reference": "f78c429032060df4c7ed0a6ad67983390d745d15",
                 "shasum": ""
             },
             "require": {
@@ -3062,7 +3062,7 @@
             "description": "A Shopware 6 API Connector for Laravel Applications",
             "support": {
                 "issues": "https://github.com/mennen-online/shopware6-api-connector/issues",
-                "source": "https://github.com/mennen-online/shopware6-api-connector/tree/1.1.0"
+                "source": "https://github.com/mennen-online/shopware6-api-connector/tree/1.1.1"
             },
             "funding": [
                 {
@@ -3070,7 +3070,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-08T11:57:51+00:00"
+            "time": "2022-11-08T13:10:54+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

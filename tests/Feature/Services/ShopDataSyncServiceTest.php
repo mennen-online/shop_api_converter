@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use MennenOnline\Shopware6ApiConnector\Endpoints\Endpoint;
 use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 
 class ShopDataSyncServiceTest extends TestCase
@@ -129,7 +128,6 @@ class ShopDataSyncServiceTest extends TestCase
             ->for($user)
             ->create([
                 'name' => 'Failing',
-                'url' => 'http://localhost',
             ]);
 
         Notification::fake();
@@ -137,8 +135,6 @@ class ShopDataSyncServiceTest extends TestCase
         try {
             SyncShopDataJob::dispatchSync($shop);
         } catch(Exception $exception) {
-            $this->assertTrue($exception instanceof NotFoundHttpException);
-
             Notification::assertSentTo($user, ShopSyncFailedNotification::class);
 
             $shop->refresh();

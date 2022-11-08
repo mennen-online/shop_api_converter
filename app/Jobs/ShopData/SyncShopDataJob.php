@@ -15,6 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use MennenOnline\Shopware6ApiConnector\Endpoints\Endpoint;
 use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
+use MennenOnline\Shopware6ApiConnector\Exceptions\Connector\EmptyShopware6ResponseException;
 
 class SyncShopDataJob implements ShouldQueue
 {
@@ -61,7 +62,7 @@ class SyncShopDataJob implements ShouldQueue
                     (new ShopDataSyncService())($this->shop, $this->endpoint, $endpoint->name, $collection);
                 }
             }
-        } catch(Exception|ShopSyncFailedException $exception) {
+        } catch(Exception|ShopSyncFailedException|EmptyShopware6ResponseException $exception) {
             $this->shop->update([
                 'status' => ShopStatusEnum::FAILED->value,
             ]);
