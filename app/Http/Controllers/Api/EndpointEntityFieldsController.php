@@ -1,17 +1,18 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\EntityFieldCollection;
 use App\Models\Endpoint;
 use App\Models\EntityField;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\EntityFieldCollection;
 
 class EndpointEntityFieldsController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Endpoint $endpoint
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Endpoint  $endpoint
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, Endpoint $endpoint)
@@ -30,9 +31,9 @@ class EndpointEntityFieldsController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Endpoint $endpoint
-     * @param \App\Models\EntityField $entityField
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Endpoint  $endpoint
+     * @param  \App\Models\EntityField  $entityField
      * @return \Illuminate\Http\Response
      */
     public function store(
@@ -48,9 +49,9 @@ class EndpointEntityFieldsController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Endpoint $endpoint
-     * @param \App\Models\EntityField $entityField
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Endpoint  $endpoint
+     * @param  \App\Models\EntityField  $entityField
      * @return \Illuminate\Http\Response
      */
     public function destroy(

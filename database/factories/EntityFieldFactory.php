@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\EntityField;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EntityFieldFactory extends Factory

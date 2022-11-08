@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\User;
-use App\Models\Shop;
 use App\Models\Entity;
-
-use Tests\TestCase;
-use Laravel\Sanctum\Sanctum;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Shop;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
 class ShopEntitiesTest extends TestCase
 {

@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\EndpointController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,4 +36,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+    Route::resources([
+        'shops' => ShopController::class,
+        'endpoints' => EndpointController::class,
+        'permissions' => PermissionController::class,
+        'roles' => RoleController::class,
+    ]);
 });

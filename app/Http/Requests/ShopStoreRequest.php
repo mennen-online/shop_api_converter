@@ -26,7 +26,9 @@ class ShopStoreRequest extends FormRequest
         return [
             'name' => ['required', 'max:255', 'string'],
             'url' => ['required', 'url'],
-            'credentials' => ['required', 'max:255', 'json'],
+            'credentials' => ['required', 'array', 'min:2', 'max:2'],
+            'credentials.api_key' => ['required', 'string', 'max:255'],
+            'credentials.api_secret' => ['required', 'string', 'max:255'],
             'user_id' => ['required', 'exists:users,id'],
         ];
     }

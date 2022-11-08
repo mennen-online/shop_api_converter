@@ -87,9 +87,9 @@ return [
 
     'features' => [
         // Features::billingAddressCollection(['required' => true]),
-        // Features::mustAcceptTerms(),
-        // Features::euVatCollection(['home-country' => 'BE']),
-        // Features::receiptEmails(['custom-addresses' => true]),
+        Features::mustAcceptTerms(),
+        Features::euVatCollection(['home-country' => 'DE']),
+        Features::receiptEmails(['custom-addresses' => true]),
         // Features::topUps(['price' => env('SPARK_TOP_UP_PRICE')]),
         Features::paymentNotificationEmails(),
     ],
@@ -106,11 +106,11 @@ return [
     */
 
     'receipt_data' => [
-        'vendor' => 'Your Product',
-        'product' => 'Your Product',
-        'street' => '111 Example St.',
-        'location' => 'Los Angeles, CA',
-        'phone' => '555-555-5555',
+        'vendor' => 'Mennen Online Inh. Hendrik Mennen',
+        'product' => 'SAPI - Ihr Shop API Converter',
+        'street' => 'Weststr. 44',
+        'location' => '26919 Brake',
+        'phone' => '+49 4401 704 17 19',
     ],
 
     /*
@@ -133,22 +133,51 @@ return [
         'user' => [
             'model' => User::class,
 
-            'trial_days' => 5,
+            'trial_days' => 0,
 
             'default_interval' => 'monthly',
 
             'plans' => [
                 [
-                    'name' => 'Standard',
-                    'short_description' => 'This is a short, human friendly description of the plan.',
-                    'monthly_id' => 'price_id',
-                    'yearly_id' => 'price_id',
+                    'name' => 'Starter',
+                    'short_description' => 'Ideal zum Ausprobieren: Erstellen Sie einen Shop mit bis zu 5 Endpunkten',
+                    'monthly_id' => env('STRIPE_STARTER_PRICE_ID'),
                     'features' => [
-                        'Feature 1',
-                        'Feature 2',
-                        'Feature 3',
+                        '1 Shop',
+                        'bis zu 5 Endpunkte',
+                        'automatische inkrementelle Updates (optional)'
                     ],
                 ],
+                [
+                    'name' => 'Premium',
+                    'short_description' => 'Sie benötigen mehr Shops? Bis zu 5 Shops können Sie hier anlegen inkl. 10 Endpunkte je Shop',
+                    'monthly_id' => env('STRIPE_PREMIUM_PRICE_ID'),
+                    'features' => [
+                        '5 Shops',
+                        '10 Endpunkte je Shop',
+                        'automatische inkrementelle Updates (optional)'
+                    ]
+                ],
+                [
+                    'name' => 'Professional',
+                    'short_description' => 'Verwalten Sie bis zu 10 Shops inkl. 20 Endpunkte je Shop',
+                    'monthly_id' => env('STRIPE_PROFESSIONAL_PRICE_ID'),
+                    'features' => [
+                        '10 Shops',
+                        '20 Endpunkte je Shop',
+                        'automatische inkrementelle Updates (optional)'
+                    ]
+                ],
+                [
+                    'name' => 'Enterprise',
+                    'short_description' => 'Unbegrenzte Shops und Endpunkte',
+                    'monthly_id' => env('STRIPE_ENTERPRICE_PRICE_ID'),
+                    'features' => [
+                        'Unbegrenzt Shops',
+                        'Unbegrenzte Endpunkte',
+                        'automatische inkrementelle Updates (optional)'
+                    ]
+                ]
             ],
 
         ],

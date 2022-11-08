@@ -18,11 +18,12 @@
         "laravel/spark-stripe": "^2.5",
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.5",
-        "mennen-online/shopware6-api-connector": "^1.0",
+        "mennen-online/shopware6-api-connector": "dev-1-add-all-available-shopware-6-endpoints",
         "spatie/laravel-permission": "^5.5",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
+        "brianium/paratest": "^6.6",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",

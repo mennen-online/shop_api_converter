@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Models\User;
 use App\Models\Shop;
-
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class ShopControllerTest extends TestCase
 {
@@ -75,7 +74,7 @@ class ShopControllerTest extends TestCase
             ->make()
             ->toArray();
 
-        $data['credentials'] = json_encode($data['credentials']);
+        $data['credentials'] = (array) $data['credentials'];
 
         $response = $this->post(route('shops.store'), $data);
 

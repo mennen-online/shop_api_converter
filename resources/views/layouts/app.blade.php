@@ -20,77 +20,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         
-        <script type="module">
-            import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
-        </script>
-        
-        @livewireStyles
+        <script type="module"></script>
     </head>
     <body class="font-sans antialiased">
-        <x-jet-banner />
 
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
-        
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-        
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-
-        @stack('modals')
-        
-        @livewireScripts
-        
-        <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js" data-turbolinks-eval="false" data-turbo-eval="false"></script>
-        
-        @stack('scripts')
-        
-        <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-        
-        @if (session()->has('success')) 
-        <script>
-            var notyf = new Notyf({dismissible: true})
-            notyf.success('{{ session('success') }}')
-        </script> 
-        @endif
-        
-        <script>
-            /* Simple Alpine Image Viewer */
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('imageViewer', (src = '') => {
-                    return {
-                        imageUrl: src,
-        
-                        refreshUrl() {
-                            this.imageUrl = this.$el.getAttribute("image-url")
-                        },
-        
-                        fileChosen(event) {
-                            this.fileToDataUrl(event, src => this.imageUrl = src)
-                        },
-        
-                        fileToDataUrl(event, callback) {
-                            if (! event.target.files.length) return
-        
-                            let file = event.target.files[0],
-                                reader = new FileReader()
-        
-                            reader.readAsDataURL(file)
-                            reader.onload = e => callback(e.target.result)
-                        },
-                    }
-                })
-            })
-        </script>
     </body>
 </html>

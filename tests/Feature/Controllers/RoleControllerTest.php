@@ -3,11 +3,10 @@
 namespace Tests\Feature\Controllers;
 
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 class RoleControllerTest extends TestCase
 {
@@ -18,7 +17,7 @@ class RoleControllerTest extends TestCase
         parent::setUp();
 
         $this->actingAs(User::factory()->create(['email' => 'admin@admin.com']));
-        
+
         $this->seed(\Database\Seeders\PermissionsSeeder::class);
 
         $this->withoutExceptionHandling();
@@ -54,7 +53,7 @@ class RoleControllerTest extends TestCase
     {
         $response = $this->post(route('roles.store'), [
             'name' => 'secretary',
-            'permissions' => []
+            'permissions' => [],
         ]);
 
         $this->assertDatabaseHas('roles', ['name' => 'secretary']);
@@ -110,7 +109,7 @@ class RoleControllerTest extends TestCase
 
         $this->assertDatabaseHas('roles', [
             'id' => $role->id,
-            'name' => 'manager'
+            'name' => 'manager',
         ]);
 
         $response->assertRedirect(route('roles.edit', $role));
@@ -126,7 +125,7 @@ class RoleControllerTest extends TestCase
         $response = $this->delete(route('roles.destroy', $role));
 
         $response->assertRedirect(route('roles.index'));
-        
+
         $this->assertModelMissing($role);
     }
 }

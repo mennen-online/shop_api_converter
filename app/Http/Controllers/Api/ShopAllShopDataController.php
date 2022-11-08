@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ShopDataCollection;
+use App\Http\Resources\ShopDataResource;
 use App\Models\Shop;
 use App\Models\ShopData;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\ShopDataResource;
-use App\Http\Resources\ShopDataCollection;
 
 class ShopAllShopDataController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Shop $shop
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request, Shop $shop)
@@ -32,8 +32,8 @@ class ShopAllShopDataController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Shop $shop
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, Shop $shop)

@@ -3,8 +3,10 @@
 namespace Database\Factories;
 
 use App\Models\Entity;
-use Illuminate\Support\Str;
+use App\Models\Shop;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
+use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
 
 class EntityFactory extends Factory
 {
@@ -23,8 +25,8 @@ class EntityFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
-            'shop_id' => \App\Models\Shop::factory(),
+            'name' => Arr::random(EndpointEnum::cases())->name,
+            'shop_id' => Shop::factory(),
         ];
     }
 }

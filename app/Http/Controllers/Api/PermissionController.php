@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Permission;
-use App\Http\Resources\PermissionResource;
 use App\Http\Resources\PermissionCollection;
+use App\Http\Resources\PermissionResource;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
     /**
-    * @return \Illuminate\Http\Response
-    */
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $this->authorize('list', Permission::class);
@@ -25,20 +25,20 @@ class PermissionController extends Controller
     }
 
     /**
-    * @param  \Illuminate\Http\Request  $request
-    * @return \Illuminate\Http\Response
-    */
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
         $this->authorize('create', Permission::class);
 
         $validated = $this->validate($request, [
             'name' => 'required|max:64',
-            'roles' => 'array'
+            'roles' => 'array',
         ]);
 
         $permission = Permission::create($validated);
-        
+
         $roles = Role::find($request->roles);
         $permission->syncRoles($roles);
 
@@ -46,9 +46,9 @@ class PermissionController extends Controller
     }
 
     /**
-    * @param  \Spatie\Permission\Models\Permission  $permission
-    * @return \Illuminate\Http\Response
-    */
+     * @param  \Spatie\Permission\Models\Permission  $permission
+     * @return \Illuminate\Http\Response
+     */
     public function show(Permission $permission)
     {
         $this->authorize('view', Permission::class);
@@ -57,21 +57,21 @@ class PermissionController extends Controller
     }
 
     /**
-    * @param  \Illuminate\Http\Request  $request
-    * @param  \Spatie\Permission\Models\Permission  $permission
-    * @return \Illuminate\Http\Response
-    */
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Spatie\Permission\Models\Permission  $permission
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, Permission $permission)
     {
         $this->authorize('update', $permission);
 
         $validated = $this->validate($request, [
             'name' => 'required|max:40',
-            'roles' => 'array'
+            'roles' => 'array',
         ]);
 
         $permission->update($validated);
-        
+
         $roles = Role::find($request->roles);
         $permission->syncRoles($roles);
 
@@ -79,9 +79,9 @@ class PermissionController extends Controller
     }
 
     /**
-    * @param  \Spatie\Permission\Models\Permission  $permission
-    * @return \Illuminate\Http\Response
-    */
+     * @param  \Spatie\Permission\Models\Permission  $permission
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Permission $permission)
     {
         $this->authorize('delete', $permission);

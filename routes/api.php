@@ -1,16 +1,16 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\EndpointController;
+use App\Http\Controllers\Api\EndpointEntityFieldsController;
+use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\ShopAllShopDataController;
+use App\Http\Controllers\Api\ShopController;
+use App\Http\Controllers\Api\ShopEndpointsController;
+use App\Http\Controllers\Api\ShopEntitiesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ShopController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\RoleController;
-use App\Http\Controllers\Api\EndpointController;
-use App\Http\Controllers\Api\PermissionController;
-use App\Http\Controllers\Api\ShopEntitiesController;
-use App\Http\Controllers\Api\ShopEndpointsController;
-use App\Http\Controllers\Api\ShopAllShopDataController;
-use App\Http\Controllers\Api\EndpointEntityFieldsController;
 
 /*
 |--------------------------------------------------------------------------

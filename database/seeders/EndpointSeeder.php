@@ -16,6 +16,6 @@ class EndpointSeeder extends Seeder
     {
         Endpoint::factory()
             ->count(5)
-            ->create();
+            ->createQuietly();
     }
 }

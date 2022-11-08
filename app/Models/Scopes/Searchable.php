@@ -7,8 +7,8 @@ trait Searchable
     /**
      * Search paginated items ordering by ID descending
      *
-     * @param string $search
-     * @param integer $paginationQuantity
+     * @param  string  $search
+     * @param  int  $paginationQuantity
      * @return void
      */
     public function scopeSearchLatestPaginated(

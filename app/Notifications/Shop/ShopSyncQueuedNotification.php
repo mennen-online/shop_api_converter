@@ -4,7 +4,6 @@ namespace App\Notifications\Shop;
 
 use App\Models\Shop;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -19,8 +18,7 @@ class ShopSyncQueuedNotification extends Notification
      */
     public function __construct(
         protected Shop $shop
-    )
-    {
+    ) {
         //
     }
 

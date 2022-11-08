@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Shop;
-use Illuminate\Http\Request;
-use App\Http\Resources\ShopResource;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ShopCollection;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
+use App\Http\Resources\ShopCollection;
+use App\Http\Resources\ShopResource;
+use App\Models\Shop;
+use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -30,7 +30,7 @@ class ShopController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\ShopStoreRequest $request
+     * @param  \App\Http\Requests\ShopStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(ShopStoreRequest $request)
@@ -38,10 +38,6 @@ class ShopController extends Controller
         $this->authorize('create', Shop::class);
 
         $validated = $request->validated();
-        $validated['credentials'] = json_decode(
-            $validated['credentials'],
-            true
-        );
 
         $shop = Shop::create($validated);
 
@@ -49,8 +45,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Shop $shop
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, Shop $shop)
@@ -61,8 +57,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\ShopUpdateRequest $request
-     * @param \App\Models\Shop $shop
+     * @param  \App\Http\Requests\ShopUpdateRequest  $request
+     * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
     public function update(ShopUpdateRequest $request, Shop $shop)
@@ -82,8 +78,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Shop $shop
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Shop  $shop
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Shop $shop)

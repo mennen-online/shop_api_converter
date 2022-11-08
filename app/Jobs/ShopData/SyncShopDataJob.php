@@ -4,23 +4,17 @@ namespace App\Jobs\ShopData;
 
 use App\Enums\Shop\ShopStatusEnum;
 use App\Exceptions\Shop\ShopSyncFailedException;
-use App\Models\Entity;
 use App\Models\Shop;
-use App\Notifications\Shop\ShopSyncFailedNotification;
 use App\Services\ShopData\ShopDataSyncService;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use MennenOnline\Shopware6ApiConnector\Endpoints\CategoryEndpoint;
-use MennenOnline\Shopware6ApiConnector\Endpoints\ProductEndpoint;
-use MennenOnline\Shopware6ApiConnector\Enums\Endpoint;
-use MennenOnline\Shopware6ApiConnector\Shopware6ApiConnector;
-use ReflectionObject;
+use MennenOnline\Shopware6ApiConnector\Endpoints\Endpoint;
+use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
 
 class SyncShopDataJob implements ShouldQueue
 {
@@ -32,9 +26,8 @@ class SyncShopDataJob implements ShouldQueue
      * @return void
      */
     public function __construct(
-        protected Shop                       $shop,
-        protected Shopware6ApiConnector|null $categoryEndpoint = null,
-        protected Shopware6ApiConnector|null $productEndpoint = null,
+        protected Shop $shop,
+        protected Endpoint|null $endpoint = null,
     ) {
     }
 
@@ -43,36 +36,38 @@ class SyncShopDataJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle() {
+    public function handle()
+    {
         $this->shop->update(
             [
-                'status' => ShopStatusEnum::RUNNING->value
+                'status' => ShopStatusEnum::RUNNING->value,
             ]
         );
 
         try {
-            $this->categoryEndpoint = Shopware6ApiConnector::category(
-                url          : $this->shop->url,
-                client_id    : $this->shop->credentials->api_key,
-                client_secret: $this->shop->credentials->api_secret
-            );
+            foreach (EndpointEnum::cases() as $endpoint) {
+                $this->endpoint = new Endpoint(
+                    url: $this->shop->url,
+                    client_id: $this->shop->credentials->api_key,
+                    client_secret: $this->shop->credentials->api_secret,
+                    endpoint: $endpoint
+                );
 
-            $categories = collect($this->categoryEndpoint->getAll(app()->environment('testing') ? 10 : null)->data);
+                $response = $this->endpoint->getAll(app()->environment('testing') ? 10 : null);
 
-            (new ShopDataSyncService())($this->shop, $this->categoryEndpoint, 'category', $categories);
+                if ($response?->total > 0) {
+                    $collection = collect($response->data);
 
-            $this->productEndpoint = Shopware6ApiConnector::product(client: $this->categoryEndpoint->getClient());
-
-            $products = collect($this->productEndpoint->getAll(app()->environment('testing') ? 10 : null)->data);
-
-            (new ShopDataSyncService())($this->shop, $this->productEndpoint, 'product', $products);
-        }catch(Exception|ShopSyncFailedException $exception) {
+                    (new ShopDataSyncService())($this->shop, $this->endpoint, $endpoint->name, $collection);
+                }
+            }
+        } catch(Exception|ShopSyncFailedException $exception) {
             $this->shop->update([
-                'status' => ShopStatusEnum::FAILED->value
+                'status' => ShopStatusEnum::FAILED->value,
             ]);
 
-            Log::critical("Shop Sync Failed", [
-                'exception' => $exception
+            Log::critical('Shop Sync Failed', [
+                'exception' => $exception,
             ]);
 
             $this->fail($exception);

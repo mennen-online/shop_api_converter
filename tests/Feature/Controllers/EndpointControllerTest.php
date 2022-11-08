@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Controllers;
 
-use App\Models\User;
 use App\Models\Endpoint;
-
 use App\Models\Shop;
-
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
 class EndpointControllerTest extends TestCase
 {

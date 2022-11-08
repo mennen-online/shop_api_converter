@@ -20,14 +20,14 @@ class ShopObserver
     public function created(Shop $shop)
     {
         $shop->update([
-            'status' => ShopStatusEnum::NOT_SYNCED->value
+            'status' => ShopStatusEnum::NOT_SYNCED->value,
         ]);
 
-        if(!app()->environment('testing')) {
+        if (! app()->environment('testing')) {
             SyncShopDataJob::dispatch($shop);
 
             $shop->update([
-                'status' => ShopStatusEnum::QUEUED->value
+                'status' => ShopStatusEnum::QUEUED->value,
             ]);
         }
     }
@@ -40,7 +40,7 @@ class ShopObserver
      */
     public function updated(Shop $shop)
     {
-        match($shop->status) {
+        match ($shop->status) {
             ShopStatusEnum::QUEUED->value => $shop->user->notify(new ShopSyncQueuedNotification($shop)),
             ShopStatusEnum::RUNNING->value => $shop->user->notify(new ShopSyncStartedNotification($shop)),
             ShopStatusEnum::FAILED->value => $shop->user->notify(new ShopSyncFailedNotification($shop)),

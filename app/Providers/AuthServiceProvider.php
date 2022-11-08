@@ -14,8 +14,8 @@ use App\Policies\EntityPolicy;
 use App\Policies\ShopDataPolicy;
 use App\Policies\ShopPolicy;
 use App\Policies\UserPolicy;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         Entity::class => EntityPolicy::class,
         ShopData::class => ShopDataPolicy::class,
         Shop::class => ShopPolicy::class,
-        User::class => UserPolicy::class
+        User::class => UserPolicy::class,
     ];
 
     /**
@@ -42,7 +42,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         // Automatically finding the Policies
         Gate::guessPolicyNamesUsing(function ($modelClass) {
-            return 'App\\Policies\\' . class_basename($modelClass) . 'Policy';
+            return 'App\\Policies\\'.class_basename($modelClass).'Policy';
         });
 
         $this->registerPolicies();

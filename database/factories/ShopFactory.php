@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use App\Enums\Shop\ShopStatusEnum;
 use App\Models\Shop;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ShopFactory extends Factory
 {
@@ -24,12 +24,12 @@ class ShopFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name,
+            'name' => Str::random(),
             'status' => ShopStatusEnum::NOT_SYNCED->value,
             'url' => $this->faker->url,
             'credentials' => [
                 'api_key' => Str::random(),
-                'api_secret' => Str::random()
+                'api_secret' => Str::random(),
             ],
             'user_id' => \App\Models\User::factory(),
         ];

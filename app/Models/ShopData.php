@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class ShopData extends Model
 {
@@ -18,7 +18,7 @@ class ShopData extends Model
     protected $table = 'shop_data';
 
     protected $casts = [
-        'content' => 'object'
+        'content' => 'object',
     ];
 
     public function entity()

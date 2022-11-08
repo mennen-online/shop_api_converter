@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shop;
-use App\Models\Endpoint;
-use Illuminate\Http\Request;
 use App\Http\Requests\EndpointStoreRequest;
 use App\Http\Requests\EndpointUpdateRequest;
+use App\Models\Endpoint;
+use App\Models\Shop;
+use Illuminate\Http\Request;
 
 class EndpointController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
@@ -29,7 +29,7 @@ class EndpointController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
@@ -42,7 +42,7 @@ class EndpointController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\EndpointStoreRequest $request
+     * @param  \App\Http\Requests\EndpointStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(EndpointStoreRequest $request)
@@ -59,8 +59,8 @@ class EndpointController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Endpoint $endpoint
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Endpoint  $endpoint
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, Endpoint $endpoint)
@@ -71,8 +71,8 @@ class EndpointController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Endpoint $endpoint
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Endpoint  $endpoint
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Endpoint $endpoint)
@@ -85,8 +85,8 @@ class EndpointController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\EndpointUpdateRequest $request
-     * @param \App\Models\Endpoint $endpoint
+     * @param  \App\Http\Requests\EndpointUpdateRequest  $request
+     * @param  \App\Models\Endpoint  $endpoint
      * @return \Illuminate\Http\Response
      */
     public function update(EndpointUpdateRequest $request, Endpoint $endpoint)
@@ -103,8 +103,8 @@ class EndpointController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Endpoint $endpoint
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Endpoint  $endpoint
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Endpoint $endpoint)

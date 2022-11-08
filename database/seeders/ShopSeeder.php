@@ -16,6 +16,6 @@ class ShopSeeder extends Seeder
     {
         Shop::factory()
             ->count(5)
-            ->create();
+            ->createQuietly();
     }
 }

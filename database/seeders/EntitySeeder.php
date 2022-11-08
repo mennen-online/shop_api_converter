@@ -16,6 +16,6 @@ class EntitySeeder extends Seeder
     {
         Entity::factory()
             ->count(5)
-            ->create();
+            ->createQuietly();
     }
 }

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\ShopData;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ShopDataFactory extends Factory
@@ -24,7 +23,7 @@ class ShopDataFactory extends Factory
     {
         return [
             'content' => json_encode([
-                'type' => $this->faker->text(10)
+                'type' => $this->faker->text(10),
             ]),
             'entity_id' => \App\Models\Entity::factory(),
             'shop_id' => \App\Models\Shop::factory(),
