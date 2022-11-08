@@ -143,8 +143,6 @@ class ShopControllerTest extends TestCase
 
         $data['id'] = $shop->id;
 
-        $data['credentials'] = $this->castToJson($data['credentials']);
-
         $this->assertDatabaseHas('shops', $data);
 
         $response->assertRedirect(route('shops.edit', $shop));
