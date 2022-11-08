@@ -34,7 +34,7 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
           coverage: none
       - name: Config Laravel Spark
-        run: composer config http-basic.spark.laravel.com ${SPARK_USERNAME} ${SPARK_API_TOKEN}
+        run: echo '{{ secrets.COMPOSER_AUTH_JSON}}' > $GITHUB_WORKSPACE/auth.json
 
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
