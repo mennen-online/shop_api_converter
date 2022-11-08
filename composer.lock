@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a7cdf261450d1e8d5edcdbe9fc9b4343",
+    "content-hash": "230ff41b3215a85458e2efc225119a41",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3019,16 +3019,16 @@
         },
         {
             "name": "mennen-online/shopware6-api-connector",
-            "version": "dev-1-add-all-available-shopware-6-endpoints",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mennen-online/shopware6-api-connector.git",
-                "reference": "afb84db0fd699992025d7dfad1aa785c5bf004fa"
+                "reference": "b322ab49c54f2c718cf67c64a75cc5956fbe75fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mennen-online/shopware6-api-connector/zipball/afb84db0fd699992025d7dfad1aa785c5bf004fa",
-                "reference": "afb84db0fd699992025d7dfad1aa785c5bf004fa",
+                "url": "https://api.github.com/repos/mennen-online/shopware6-api-connector/zipball/b322ab49c54f2c718cf67c64a75cc5956fbe75fd",
+                "reference": "b322ab49c54f2c718cf67c64a75cc5956fbe75fd",
                 "shasum": ""
             },
             "require": {
@@ -3062,7 +3062,7 @@
             "description": "A Shopware 6 API Connector for Laravel Applications",
             "support": {
                 "issues": "https://github.com/mennen-online/shopware6-api-connector/issues",
-                "source": "https://github.com/mennen-online/shopware6-api-connector/tree/1-add-all-available-shopware-6-endpoints"
+                "source": "https://github.com/mennen-online/shopware6-api-connector/tree/1.1.0"
             },
             "funding": [
                 {
@@ -3070,7 +3070,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-11-08T08:43:25+00:00"
+            "time": "2022-11-08T11:57:51+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -10478,9 +10478,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "mennen-online/shopware6-api-connector": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
