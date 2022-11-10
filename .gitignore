@@ -3,6 +3,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+/storage/logs
 storage/framework/views/*
 !storage/framework/views/.gitkeep
 storage/framework/cache/*
