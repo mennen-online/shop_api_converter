@@ -5,26 +5,18 @@ namespace Tests\Feature\Api;
 use App\Models\Endpoint;
 use App\Models\Shop;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class EndpointTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create(['email' => 'admin@admin.com']);
-
-        Sanctum::actingAs($user, [], 'web');
-
-        $this->seed(\Database\Seeders\PermissionsSeeder::class);
-
-        $this->withoutExceptionHandling();
+        $this->actingAs(User::first());
     }
 
     /**
@@ -46,6 +38,7 @@ class EndpointTest extends TestCase
      */
     public function it_stores_the_endpoint()
     {
+
         $data = Endpoint::factory()
             ->make()
             ->toArray();
@@ -64,12 +57,14 @@ class EndpointTest extends TestCase
     {
         $endpoint = Endpoint::factory()->create();
 
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $data = [
             'name' => $this->faker->name,
             'url' => $this->faker->url,
             'shop_id' => $shop->id,
+            'entity_id' => $endpoint->entity_id,
+            'entity_field_id' => $endpoint->entity_field_id
         ];
 
         $response = $this->putJson(

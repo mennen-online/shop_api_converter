@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ShopAllShopDataController;
 use App\Http\Controllers\Api\ShopController;
+use App\Http\Controllers\Api\ShopEndpointResourceController;
 use App\Http\Controllers\Api\ShopEndpointsController;
 use App\Http\Controllers\Api\ShopEntitiesController;
 use Illuminate\Http\Request;
@@ -84,4 +85,9 @@ Route::name('api.')
             EndpointEntityFieldsController::class,
             'destroy',
         ])->name('endpoints.entity-fields.destroy');
+
+        Route::get('{endpoint:url}/{id?}', [
+            ShopEndpointResourceController::class,
+            'show'
+        ])->name('customer-endpoint');
     });

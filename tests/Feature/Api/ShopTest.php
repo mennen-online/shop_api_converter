@@ -4,27 +4,19 @@ namespace Tests\Feature\Api;
 
 use App\Models\Shop;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ShopTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create(['email' => 'admin@admin.com']);
-
-        Sanctum::actingAs($user, [], 'web');
-
-        $this->seed(\Database\Seeders\PermissionsSeeder::class);
-
-        $this->withoutExceptionHandling();
+        $this->actingAs(User::first());
     }
 
     /**
@@ -33,6 +25,7 @@ class ShopTest extends TestCase
     public function it_gets_shops_list()
     {
         $shops = Shop::factory()
+            ->shopware6()
             ->count(5)
             ->create();
 
@@ -47,6 +40,7 @@ class ShopTest extends TestCase
     public function it_stores_the_shop()
     {
         $data = Shop::factory()
+            ->shopware6()
             ->make()
             ->toArray();
 
@@ -66,13 +60,14 @@ class ShopTest extends TestCase
      */
     public function it_updates_the_shop()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $user = User::factory()->create();
 
         $data = [
             'name' => $this->faker->name,
             'url' => $this->faker->url,
+            'type' => $shop->type,
             'credentials' => json_encode([
                 'api_key' => Str::random(),
                 'api_secret' => Str::random(),
@@ -98,7 +93,7 @@ class ShopTest extends TestCase
      */
     public function it_deletes_the_shop()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $response = $this->deleteJson(route('api.shops.destroy', $shop));
 

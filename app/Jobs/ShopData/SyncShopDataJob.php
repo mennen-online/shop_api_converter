@@ -5,7 +5,9 @@ namespace App\Jobs\ShopData;
 use App\Enums\Shop\ShopStatusEnum;
 use App\Exceptions\Shop\ShopSyncFailedException;
 use App\Models\Shop;
-use App\Services\ShopData\ShopDataSyncService;
+use App\Services\Shop\Connector\ShopConnectorService;
+use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
+use App\Services\ShopData\ShopDataSyncServiceLoader;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,9 +15,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use MennenOnline\Shopware6ApiConnector\Endpoints\Endpoint;
-use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
 use MennenOnline\Shopware6ApiConnector\Exceptions\Connector\EmptyShopware6ResponseException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SyncShopDataJob implements ShouldQueue
 {
@@ -28,7 +29,7 @@ class SyncShopDataJob implements ShouldQueue
      */
     public function __construct(
         protected Shop $shop,
-        protected Endpoint|null $endpoint = null,
+        protected ShopDataSyncServiceEndpointLoader $endpointLoader
     ) {
     }
 
@@ -46,20 +47,19 @@ class SyncShopDataJob implements ShouldQueue
         );
 
         try {
-            foreach (EndpointEnum::cases() as $endpoint) {
-                $this->endpoint = new Endpoint(
-                    url: $this->shop->url,
-                    client_id: $this->shop->credentials->api_key,
-                    client_secret: $this->shop->credentials->api_secret,
-                    endpoint: $endpoint
-                );
+            foreach ($this->endpointLoader->getEndpointEnumCasesForShop($this->shop) as $endpoint) {
+                $connector = (new ShopConnectorService())->getConnector($this->shop, $endpoint);
 
-                $response = $this->endpoint->getAll(app()->environment('testing') ? 10 : null);
+                try {
+                    $collection = $connector->getAll(app()->environment('testing') ? 10 : null);
+                }catch(NotFoundHttpException $exception) {
+                    Log::warning("Endpoint $endpoint->name not found");
 
-                if ($response?->total > 0) {
-                    $collection = collect($response->data);
+                    continue;
+                }
 
-                    (new ShopDataSyncService())($this->shop, $this->endpoint, $endpoint->name, $collection);
+                if($collection->data) {
+                    ((new ShopDataSyncServiceLoader())($this->shop))($this->shop, new ShopConnectorService(), $endpoint->name, $collection->data);
                 }
             }
         } catch(Exception|ShopSyncFailedException|EmptyShopware6ResponseException $exception) {

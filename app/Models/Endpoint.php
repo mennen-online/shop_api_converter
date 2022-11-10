@@ -11,7 +11,7 @@ class Endpoint extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['shop_id', 'name', 'url'];
+    protected $fillable = ['shop_id', 'entity_id', 'entity_field_id', 'name', 'url'];
 
     protected $searchableFields = ['*'];
 
@@ -23,5 +23,15 @@ class Endpoint extends Model
     public function entityFields()
     {
         return $this->belongsToMany(EntityField::class);
+    }
+
+    public function mainEntity()
+    {
+        return $this->belongsTo(Entity::class);
+    }
+
+    public function mainEntityField()
+    {
+        return $this->belongsTo(EntityField::class);
     }
 }

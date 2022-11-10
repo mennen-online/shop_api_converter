@@ -11,12 +11,12 @@ class Shop extends Model
     use HasFactory;
     use Searchable;
 
-    protected $fillable = ['name', 'status', 'url', 'credentials', 'user_id'];
+    protected $fillable = ['name', 'type', 'status', 'url', 'credentials', 'user_id'];
 
     protected $searchableFields = ['*'];
 
     protected $casts = [
-        'credentials' => 'object',
+        'credentials' => 'encrypted:object',
     ];
 
     public function user()

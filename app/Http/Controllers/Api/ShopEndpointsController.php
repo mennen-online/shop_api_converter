@@ -42,6 +42,8 @@ class ShopEndpointsController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'max:255', 'string'],
             'url' => ['required', 'url'],
+            'entity_id' => ['required', 'exists:entities,id'],
+            'entity_field_id' => ['required', 'exists:entity_fields,id']
         ]);
 
         $endpoint = $shop->endpoints()->create($validated);

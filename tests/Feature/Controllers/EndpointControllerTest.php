@@ -5,23 +5,21 @@ namespace Tests\Feature\Controllers;
 use App\Models\Endpoint;
 use App\Models\Shop;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EndpointControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use DatabaseMigrations, WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->actingAs(
-            User::factory()->create(['email' => 'admin@admin.com'])
+            User::first() ?? User::factory()->create(['email' => 'admin@admin.com'])
         );
-
-        $this->seed(\Database\Seeders\PermissionsSeeder::class);
 
         $this->withoutExceptionHandling();
     }
@@ -108,12 +106,14 @@ class EndpointControllerTest extends TestCase
     {
         $endpoint = Endpoint::factory()->create();
 
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $data = [
             'name' => $this->faker->name,
             'url' => $this->faker->url,
             'shop_id' => $shop->id,
+            'entity_id' => $endpoint->entity_id,
+            'entity_field_id' => $endpoint->entity_field_id,
         ];
 
         $response = $this->put(route('endpoints.update', $endpoint), $data);
