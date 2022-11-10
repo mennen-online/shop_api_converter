@@ -3,6 +3,12 @@
 /public/hot
 /public/storage
 /storage/*.key
+storage/framework/views/*
+!storage/framework/views/.gitkeep
+storage/framework/cache/*
+!storage/framework/cache/.gitkeep
+storage/framework/sessions/*
+!storage/framework/sessions/.gitkeep
 /vendor
 .env
 .env.backup
@@ -16,4 +22,3 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-.env

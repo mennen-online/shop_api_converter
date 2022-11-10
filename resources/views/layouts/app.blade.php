@@ -17,12 +17,13 @@
         <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
         
         <!-- Scripts -->
+        @routes
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+        @inertiaHead
         
         <script type="module"></script>
     </head>
     <body class="font-sans antialiased">
-
+        @inertia
     </body>
 </html>
