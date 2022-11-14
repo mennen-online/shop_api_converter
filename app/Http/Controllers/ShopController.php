@@ -6,12 +6,14 @@ use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Shop;
 use App\Models\User;
+use App\Policies\ShopPolicy;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
     /**
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index(Request $request)
@@ -22,14 +24,18 @@ class ShopController extends Controller
 
         $shops = Shop::search($search)
             ->latest()
-            ->paginate(5)
-            ->withQueryString();
+            ->select('id', 'name', 'url', 'status', 'created_at', 'updated_at')
+            ->paginate(15)
+            ->toArray();
 
-        return view('app.shops.index', compact('shops', 'search'));
+
+
+        return Inertia::render('Dashboard', ['shops' => $shops]);
+//        return view('app.shops.index', compact('shops', 'search'));
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
@@ -42,7 +48,7 @@ class ShopController extends Controller
     }
 
     /**
-     * @param  \App\Http\Requests\ShopStoreRequest  $request
+     * @param \App\Http\Requests\ShopStoreRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(ShopStoreRequest $request)
@@ -59,8 +65,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Shop $shop
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, Shop $shop)
@@ -71,8 +77,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Shop $shop
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request, Shop $shop)
@@ -85,8 +91,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param  \App\Http\Requests\ShopUpdateRequest  $request
-     * @param  \App\Models\Shop  $shop
+     * @param \App\Http\Requests\ShopUpdateRequest $request
+     * @param \App\Models\Shop $shop
      * @return \Illuminate\Http\Response
      */
     public function update(ShopUpdateRequest $request, Shop $shop)
@@ -107,8 +113,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Shop $shop
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Shop $shop)
