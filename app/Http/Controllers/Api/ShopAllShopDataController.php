@@ -14,7 +14,7 @@ class ShopAllShopDataController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @return ShopDataCollection
      */
     public function index(Request $request, Shop $shop)
     {
@@ -34,7 +34,7 @@ class ShopAllShopDataController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @return ShopDataResource
      */
     public function store(Request $request, Shop $shop)
     {

@@ -11,7 +11,8 @@ use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
 
 class Shopware6ShopDataSyncService implements ShopDataSyncServiceInterface
 {
-    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, Collection $collection) {
+    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, Collection $collection)
+    {
         $shopApiConnector = $shopConnectorService->getConnector($shop, collect(EndpointEnum::cases())->filter(
             function (EndpointEnum $endpointEnum) use ($endpoint) {
                 if ($endpointEnum->name === $endpoint) {
@@ -25,7 +26,7 @@ class Shopware6ShopDataSyncService implements ShopDataSyncServiceInterface
 
         $element = $collection->first();
 
-        if (!$element) {
+        if (! $element) {
             throw new ShopSyncFailedException("First Element for $endpoint is null", 419);
         }
 

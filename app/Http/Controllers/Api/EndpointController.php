@@ -9,12 +9,13 @@ use App\Http\Resources\EndpointCollection;
 use App\Http\Resources\EndpointResource;
 use App\Models\Endpoint;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class EndpointController extends Controller
 {
     /**
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return EndpointCollection
      */
     public function index(Request $request)
     {
@@ -31,7 +32,7 @@ class EndpointController extends Controller
 
     /**
      * @param  \App\Http\Requests\EndpointStoreRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return EndpointResource
      */
     public function store(EndpointStoreRequest $request)
     {
@@ -47,7 +48,7 @@ class EndpointController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Endpoint  $endpoint
-     * @return \Illuminate\Http\Response
+     * @return EndpointResource
      */
     public function show(Request $request, Endpoint $endpoint)
     {
@@ -59,7 +60,7 @@ class EndpointController extends Controller
     /**
      * @param  \App\Http\Requests\EndpointUpdateRequest  $request
      * @param  \App\Models\Endpoint  $endpoint
-     * @return \Illuminate\Http\Response
+     * @return EndpointResource
      */
     public function update(EndpointUpdateRequest $request, Endpoint $endpoint)
     {
@@ -75,7 +76,7 @@ class EndpointController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Endpoint  $endpoint
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Request $request, Endpoint $endpoint)
     {

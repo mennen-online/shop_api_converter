@@ -8,7 +8,8 @@ use App\Models\Endpoint;
 
 class ShopEndpointResourceController extends Controller
 {
-    public function show(ShowShopEndpointResourceRequest $request, Endpoint $endpoint, string|int|null $id = null) {
+    public function show(ShowShopEndpointResourceRequest $request, Endpoint $endpoint, string|int|null $id = null)
+    {
         /** TODO:
          * Implementing Logic:
          *

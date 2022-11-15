@@ -36,18 +36,20 @@ class ShopFactory extends Factory
         ];
     }
 
-    public function shopware6() {
-        return $this->state(function(array $attributes) {
+    public function shopware6()
+    {
+        return $this->state(function (array $attributes) {
             return [
-                'type' => ShopTypeEnum::SHOPWARE6->value
+                'type' => ShopTypeEnum::SHOPWARE6->value,
             ];
         });
     }
 
-    public function shopware5() {
-        return $this->state(function(array $attributes) {
+    public function shopware5()
+    {
+        return $this->state(function (array $attributes) {
             return [
-                'type' => ShopTypeEnum::SHOPWARE5->value
+                'type' => ShopTypeEnum::SHOPWARE5->value,
             ];
         });
     }

@@ -5,16 +5,19 @@ namespace Tests\Feature\Api;
 use App\Models\Endpoint;
 use App\Models\Shop;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EndpointTest extends TestCase
 {
-    use WithFaker;
+    use RefreshDatabase, WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->artisan('db:seed');
 
         $this->actingAs(User::first());
     }
@@ -38,7 +41,6 @@ class EndpointTest extends TestCase
      */
     public function it_stores_the_endpoint()
     {
-
         $data = Endpoint::factory()
             ->make()
             ->toArray();
@@ -64,7 +66,7 @@ class EndpointTest extends TestCase
             'url' => $this->faker->url,
             'shop_id' => $shop->id,
             'entity_id' => $endpoint->entity_id,
-            'entity_field_id' => $endpoint->entity_field_id
+            'entity_field_id' => $endpoint->entity_field_id,
         ];
 
         $response = $this->putJson(

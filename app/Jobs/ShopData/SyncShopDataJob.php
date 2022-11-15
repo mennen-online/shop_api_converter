@@ -52,13 +52,13 @@ class SyncShopDataJob implements ShouldQueue
 
                 try {
                     $collection = $connector->getAll(app()->environment('testing') ? 10 : null);
-                }catch(NotFoundHttpException $exception) {
+                } catch(NotFoundHttpException $exception) {
                     Log::warning("Endpoint $endpoint->name not found");
 
                     continue;
                 }
 
-                if($collection->data) {
+                if ($collection->data) {
                     ((new ShopDataSyncServiceLoader())($this->shop))($this->shop, new ShopConnectorService(), $endpoint->name, $collection->data);
                 }
             }

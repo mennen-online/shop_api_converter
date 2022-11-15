@@ -13,8 +13,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Shopware5ShopDataSyncService implements ShopDataSyncServiceInterface
 {
-
-    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, Collection $collection) {
+    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, Collection $collection)
+    {
         $shopApiConnector = $shopConnectorService->getConnector($shop, collect(EndpointEnum::cases())->filter(
             function (EndpointEnum $endpointEnum) use ($endpoint) {
                 if ($endpointEnum->name === $endpoint) {
@@ -28,20 +28,20 @@ class Shopware5ShopDataSyncService implements ShopDataSyncServiceInterface
 
         $element = $collection->first();
 
-        if (!$element) {
+        if (! $element) {
             throw new ShopSyncFailedException("First Element for $endpoint is null", 419);
         }
 
-        if(!is_object($element)) {
-            $collection->each(function($value, $key) use($entity) {
+        if (! is_object($element)) {
+            $collection->each(function ($value, $key) use ($entity) {
                 $entity->entityFields()->updateOrCreate([
-                    'name' => $key
+                    'name' => $key,
                 ]);
             });
 
             $entity->allShopData()->updateOrCreate([
                 'shop_id' => $shop->id,
-                'content' => $collection->toJson()
+                'content' => $collection->toJson(),
             ]);
         } else {
             collect(get_object_vars($element))->each(function ($value, $key) use ($entity) {
@@ -51,11 +51,11 @@ class Shopware5ShopDataSyncService implements ShopDataSyncServiceInterface
             });
 
             $collection->each(function (object $element) use ($shopApiConnector, $shop, $entity, $endpoint) {
-                $id = !property_exists($element, 'id') ? $element->key : $element->id;
+                $id = ! property_exists($element, 'id') ? $element->key : $element->id;
 
                 try {
                     $data = $shopApiConnector->getSingle($id)->data;
-                }catch(NotFoundHttpException $exception) {
+                } catch(NotFoundHttpException $exception) {
                     Log::warning("Fetching Single $endpoint Resource with ID $id failed - use Collection Data");
 
                     $data = $element;

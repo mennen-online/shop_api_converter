@@ -5,16 +5,19 @@ namespace Tests\Feature\Api;
 use App\Models\Shop;
 use App\Models\ShopData;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ShopAllShopDataTest extends TestCase
 {
-    use WithFaker;
+    use RefreshDatabase, WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->artisan('db:seed');
 
         $this->actingAs(User::first());
     }
@@ -53,9 +56,10 @@ class ShopAllShopDataTest extends TestCase
             $data
         );
 
-        unset($data['shop_id']);
         unset($data['entity_id']);
         unset($data['content']);
+        unset($data['shop']);
+        unset($data['entity']);
 
         $this->assertDatabaseHas('shop_data', $data);
 

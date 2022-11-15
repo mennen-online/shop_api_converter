@@ -21,7 +21,8 @@ class ShopEndpointResourceControllerTest extends TestCase
         $this->actingAs(User::first());
     }
 
-    public function it_can_receive_a_single_resource_through_a_defined_endpoint() {
+    public function it_can_receive_a_single_resource_through_a_defined_endpoint()
+    {
         $user = User::first();
 
         $shop = Shop::factory()->shopware6()
@@ -61,15 +62,15 @@ class ShopEndpointResourceControllerTest extends TestCase
                 [
                     'url' => 'my-test-url',
                     'entity_id' => $entity->id,
-                    'entity_field_id' => $entity->entityFields()->inRandomOrder()->first()->id
+                    'entity_field_id' => $entity->entityFields()->inRandomOrder()->first()->id,
                 ]
             );
 
-        $entityCollection = $shop->allShopData->map(function(ShopData $data){
+        $entityCollection = $shop->allShopData->map(function (ShopData $data) {
             return $data->entity;
         });
 
-        $entityFieldCollection = $entityCollection->random(3)->map(function(Entity $entity) {
+        $entityFieldCollection = $entityCollection->random(3)->map(function (Entity $entity) {
             return $entity->entityFields;
         })->flatten();
 

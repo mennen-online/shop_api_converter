@@ -10,6 +10,7 @@ use App\Notifications\Shop\ShopSyncFailedNotification;
 use App\Observers\ShopObserver;
 use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
 use Exception;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
@@ -22,10 +23,20 @@ use Tests\TestCase;
 
 class ShopDataSyncServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->artisan('db:seed');
+    }
+
     /**
      * @test
      */
-    public function it_can_sync_shop_data_from_shopware5() {
+    public function it_can_sync_shop_data_from_shopware5()
+    {
         Notification::fake();
 
         $shopObserverMock = $this->mock(ShopObserver::class);
@@ -70,12 +81,12 @@ class ShopDataSyncServiceTest extends TestCase
 
                     $this->assertModelExists($entity);
 
-                    if(!is_object($collection->first())) {
-                        $this->assertSame(1, $shop->allShopData()->whereEntityId($entity->id)->count(), $entity->name . ' Count is not ' . $collection->count());
+                    if (! is_object($collection->first())) {
+                        $this->assertSame(1, $shop->allShopData()->whereEntityId($entity->id)->count(), $entity->name.' Count is not '.$collection->count());
                     } else {
-                        $this->assertSame($collection->count(), $shop->allShopData()->whereEntityId($entity->id)->count(), $entity->name . ' Count is not ' . $collection->count());
+                        $this->assertSame($collection->count(), $shop->allShopData()->whereEntityId($entity->id)->count(), $entity->name.' Count is not '.$collection->count());
 
-                        $collection->each(function(object $element) use($endpoint, $shop, $entity) {
+                        $collection->each(function (object $element) use ($endpoint, $shop, $entity) {
                             $id = property_exists($element, 'id') ? $element->id : $element->key;
 
                             $data = $endpoint->getSingle($id)->data;
@@ -89,7 +100,7 @@ class ShopDataSyncServiceTest extends TestCase
                         'name' => $endpointEnum->name,
                     ]);
                 }
-            }catch(NotFoundHttpException $exception) {
+            } catch(NotFoundHttpException $exception) {
                 continue;
             }
         }

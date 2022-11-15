@@ -13,7 +13,7 @@ class EndpointEntityFieldsController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Endpoint  $endpoint
-     * @return \Illuminate\Http\Response
+     * @return EntityFieldCollection
      */
     public function index(Request $request, Endpoint $endpoint)
     {

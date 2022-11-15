@@ -4,17 +4,20 @@ namespace Tests\Feature\Api;
 
 use App\Models\Shop;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class ShopTest extends TestCase
 {
-    use WithFaker;
+    use RefreshDatabase, WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->artisan('db:seed');
 
         $this->actingAs(User::first());
     }
@@ -24,6 +27,8 @@ class ShopTest extends TestCase
      */
     public function it_gets_shops_list()
     {
+        Shop::all()->each(fn (Shop $shop) => $shop->delete());
+
         $shops = Shop::factory()
             ->shopware6()
             ->count(5)

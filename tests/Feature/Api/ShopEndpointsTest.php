@@ -7,16 +7,19 @@ use App\Models\Entity;
 use App\Models\EntityField;
 use App\Models\Shop;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ShopEndpointsTest extends TestCase
 {
-    use WithFaker;
+    use RefreshDatabase, WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->artisan('db:seed');
 
         $this->actingAs(User::first());
     }
@@ -51,7 +54,7 @@ class ShopEndpointsTest extends TestCase
             ->make(
                 [
                     'entity_id' => $entity->id,
-                    'entity_field_id' => $entityField->id
+                    'entity_field_id' => $entityField->id,
                 ]
             )
             ->toArray();

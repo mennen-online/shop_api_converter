@@ -3,18 +3,20 @@
 namespace Tests\Feature\Controllers;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class RoleControllerTest extends TestCase
 {
-    use DatabaseMigrations, WithFaker;
+    use RefreshDatabase, WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->artisan('db:seed');
 
         $this->actingAs(User::first() ?? User::factory()->create(['email' => 'admin@admin.com']));
 

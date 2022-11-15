@@ -9,8 +9,9 @@ use MennenOnline\Shopware6ApiConnector\Endpoints\Endpoint as Shopware6Endpoint;
 
 class ShopConnectorService
 {
-    public function getConnector(Shop $shop, object $endpointEnum) {
-        return match($shop->type) {
+    public function getConnector(Shop $shop, object $endpointEnum)
+    {
+        return match ($shop->type) {
             ShopTypeEnum::SHOPWARE6->value => new Shopware6Endpoint(
                 url: $shop->url,
                 client_id: $shop->credentials->api_key,

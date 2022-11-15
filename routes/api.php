@@ -88,6 +88,6 @@ Route::name('api.')
 
         Route::get('{endpoint:url}/{id?}', [
             ShopEndpointResourceController::class,
-            'show'
+            'show',
         ])->name('customer-endpoint');
     });

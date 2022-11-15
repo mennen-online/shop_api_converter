@@ -17,7 +17,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
     }
 
     /**
@@ -27,11 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton(ShopDataSyncServiceLoader::class, function() {
+        $this->app->singleton(ShopDataSyncServiceLoader::class, function () {
             return new ShopDataSyncServiceLoader();
         });
 
-        $this->app->singleton(ShopDataSyncServiceEndpointLoader::class, function() {
+        $this->app->singleton(ShopDataSyncServiceEndpointLoader::class, function () {
             return new ShopDataSyncServiceEndpointLoader();
         });
 

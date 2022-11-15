@@ -28,7 +28,7 @@ class EndpointUpdateRequest extends FormRequest
             'name' => ['required', 'max:255', 'string'],
             'url' => ['required', 'url'],
             'entity_id' => ['required', 'exists:entities,id'],
-            'entity_field_id' => ['required', 'exists:entity_fields,id']
+            'entity_field_id' => ['required', 'exists:entity_fields,id'],
         ];
     }
 }
