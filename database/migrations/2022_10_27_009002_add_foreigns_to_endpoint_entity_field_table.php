@@ -37,9 +37,11 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('endpoint_entity_field', function (Blueprint $table) {
-            $table->dropForeign(['entity_field_id']);
-            $table->dropForeign(['endpoint_id']);
-        });
+        if(!app()->environment('testing')) {
+            Schema::table('endpoint_entity_field', function (Blueprint $table) {
+                $table->dropForeign(['entity_field_id']);
+                $table->dropForeign(['endpoint_id']);
+            });
+        }
     }
 };

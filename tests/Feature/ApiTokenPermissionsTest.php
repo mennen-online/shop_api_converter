@@ -3,12 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
 use Tests\TestCase;
 
 class ApiTokenPermissionsTest extends TestCase
 {
+    use DatabaseMigrations;
+
     public function test_api_token_permissions_can_be_updated()
     {
         if (! Features::hasApiFeatures()) {
