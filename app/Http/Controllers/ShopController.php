@@ -30,7 +30,7 @@ class ShopController extends Controller
 
 
 
-        return Inertia::render('Dashboard', ['shops' => $shops]);
+        return Inertia::render('Shops', ['shops' => $shops]);
 //        return view('app.shops.index', compact('shops', 'search'));
     }
 
