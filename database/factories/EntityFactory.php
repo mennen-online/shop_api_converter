@@ -26,7 +26,7 @@ class EntityFactory extends Factory
     {
         return [
             'name' => Arr::random(EndpointEnum::cases())->name,
-            'shop_id' => Shop::factory(),
+            'shop_id' => Shop::factory()->shopware6(),
         ];
     }
 }

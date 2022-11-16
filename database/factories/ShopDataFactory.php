@@ -26,7 +26,7 @@ class ShopDataFactory extends Factory
                 'type' => $this->faker->text(10),
             ]),
             'entity_id' => \App\Models\Entity::factory(),
-            'shop_id' => \App\Models\Shop::factory(),
+            'shop_id' => \App\Models\Shop::factory()->shopware6(),
         ];
     }
 }

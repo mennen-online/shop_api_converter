@@ -7,7 +7,6 @@ use App\Models\ShopData;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ShopAllShopDataTest extends TestCase
@@ -18,13 +17,9 @@ class ShopAllShopDataTest extends TestCase
     {
         parent::setUp();
 
-        $user = User::factory()->create(['email' => 'admin@admin.com']);
+        $this->artisan('db:seed');
 
-        Sanctum::actingAs($user, [], 'web');
-
-        $this->seed(\Database\Seeders\PermissionsSeeder::class);
-
-        $this->withoutExceptionHandling();
+        $this->actingAs(User::first());
     }
 
     /**
@@ -34,7 +29,7 @@ class ShopAllShopDataTest extends TestCase
     {
         $allShopData = ShopData::factory()
             ->count(2)
-            ->for(Shop::factory())
+            ->for(Shop::factory()->shopware6())
             ->create();
 
         $response = $this->getJson(
@@ -50,7 +45,7 @@ class ShopAllShopDataTest extends TestCase
     public function it_stores_the_shop_all_shop_data()
     {
         $data = ShopData::factory()
-            ->for(Shop::factory())
+            ->for(Shop::factory()->shopware6())
             ->make()
             ->toArray();
 
@@ -61,9 +56,10 @@ class ShopAllShopDataTest extends TestCase
             $data
         );
 
-        unset($data['shop_id']);
         unset($data['entity_id']);
         unset($data['content']);
+        unset($data['shop']);
+        unset($data['entity']);
 
         $this->assertDatabaseHas('shop_data', $data);
 

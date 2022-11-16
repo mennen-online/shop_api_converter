@@ -3,11 +3,12 @@
 namespace Tests\Feature\Api;
 
 use App\Models\Endpoint;
+use App\Models\Entity;
+use App\Models\EntityField;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ShopEndpointsTest extends TestCase
@@ -18,13 +19,9 @@ class ShopEndpointsTest extends TestCase
     {
         parent::setUp();
 
-        $user = User::factory()->create(['email' => 'admin@admin.com']);
+        $this->artisan('db:seed');
 
-        Sanctum::actingAs($user, [], 'web');
-
-        $this->seed(\Database\Seeders\PermissionsSeeder::class);
-
-        $this->withoutExceptionHandling();
+        $this->actingAs(User::first());
     }
 
     /**
@@ -32,7 +29,7 @@ class ShopEndpointsTest extends TestCase
      */
     public function it_gets_shop_endpoints()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
         $endpoints = Endpoint::factory()
             ->count(2)
             ->create([
@@ -49,11 +46,17 @@ class ShopEndpointsTest extends TestCase
      */
     public function it_stores_the_shop_endpoints()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
+        $entity = Entity::factory()->for($shop)->create();
+        $entityField = EntityField::factory()->for($entity)->create();
         $data = Endpoint::factory()
-            ->make([
-                'shop_id' => $shop->id,
-            ])
+            ->for($shop)
+            ->make(
+                [
+                    'entity_id' => $entity->id,
+                    'entity_field_id' => $entityField->id,
+                ]
+            )
             ->toArray();
 
         $response = $this->postJson(

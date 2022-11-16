@@ -17,9 +17,10 @@ return new class extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('type');
             $table->string('status')->default(ShopStatusEnum::NOT_SYNCED->value);
             $table->string('url');
-            $table->json('credentials');
+            $table->longText('credentials');
             $table->unsignedBigInteger('user_id');
 
             $table->timestamps();

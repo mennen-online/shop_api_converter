@@ -3,6 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Endpoint;
+use App\Models\Entity;
+use App\Models\EntityField;
+use App\Models\Shop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EndpointFactory extends Factory
@@ -21,10 +24,18 @@ class EndpointFactory extends Factory
      */
     public function definition()
     {
+        $shop = Shop::factory()->shopware6();
+
+        $entity = Entity::factory()->for($shop);
+
+        $entityField = EntityField::factory()->for($entity);
+
         return [
             'name' => $this->faker->name,
             'url' => $this->faker->url,
-            'shop_id' => \App\Models\Shop::factory(),
+            'shop_id' => $shop,
+            'entity_id' => $entity,
+            'entity_field_id' => $entityField,
         ];
     }
 }

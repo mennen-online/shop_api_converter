@@ -56,3 +56,11 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit
+        env:
+          SW5_CUSTOMER_URL: https://lederband-hamburg.de
+          SW5_CLIENT_ID: Henning
+          SW5_CLIENT_SECRET: bTsQHGrVzFyNOlFsGRXeTy3o7Unsu7J2GkT1VVy9
+          SW6_CUSTOMER_URL: https://iuvascare.de
+          SW6_CLIENT_ID: SWIAQ1G4NEQ2ZKNSS3HROTFHRA
+          SW6_CLIENT_SECRET: WGdlMUlIMjV5VWdGM0x5U3NQcTJOZ1ZBZ21UQ3FjcndxVHRMWGo
+

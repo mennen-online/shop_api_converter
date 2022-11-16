@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Shop\ShopTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ShopStoreRequest extends FormRequest
 {
@@ -25,6 +27,7 @@ class ShopStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255', 'string'],
+            'type' => ['required', new Enum(ShopTypeEnum::class)],
             'url' => ['required', 'url'],
             'credentials' => ['required', 'array', 'min:2', 'max:2'],
             'credentials.api_key' => ['required', 'string', 'max:255'],

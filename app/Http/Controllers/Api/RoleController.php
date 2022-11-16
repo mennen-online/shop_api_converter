@@ -13,7 +13,7 @@ class RoleController extends Controller
 {
     /**
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return RoleCollection
      */
     public function index(Request $request)
     {
@@ -27,7 +27,7 @@ class RoleController extends Controller
 
     /**
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return RoleResource
      */
     public function store(Request $request)
     {
@@ -48,7 +48,7 @@ class RoleController extends Controller
 
     /**
      * @param  \Spatie\Permission\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @return RoleResource
      */
     public function show(Role $role)
     {
@@ -60,7 +60,7 @@ class RoleController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \Spatie\Permission\Models\Role  $role
-     * @return \Illuminate\Http\Response
+     * @return RoleResource
      */
     public function update(Request $request, Role $role)
     {
