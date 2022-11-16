@@ -37,7 +37,7 @@ return new class extends Migration
      */
     public function down()
     {
-        if(!app()->environment('testing')) {
+        if (! app()->environment('testing')) {
             Schema::table('endpoint_entity_field', function (Blueprint $table) {
                 $table->dropForeign(['entity_field_id']);
                 $table->dropForeign(['endpoint_id']);

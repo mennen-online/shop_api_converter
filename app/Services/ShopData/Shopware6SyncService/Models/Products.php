@@ -6,16 +6,18 @@ use App\Models\Shop;
 use App\Services\ShopData\ShopDataBaseModel;
 use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
 
-class Product extends ShopDataBaseModel
+class Products extends ShopDataBaseModel
 {
     public function category(Shop $shop)
     {
-        return $this->getEntity($shop, EndpointEnum::CATEGORY, $this->categoryId, 'id');
+        return $this->getEntity($shop, EndpointEnum::CATEGORY, $this->categoryId, 'id')
+            ->mapInto(Categories::class);
     }
 
-    public function media(Shop $shop)
+    public function images(Shop $shop)
     {
-        return $this->getEntity($shop, EndpointEnum::MEDIA, $this->mediaId, 'id');
+        return $this->getEntity($shop, EndpointEnum::MEDIA, $this->mediaId, 'id')
+            ->mapInto(Images::class);
     }
 
     public function price(Shop $shop)
