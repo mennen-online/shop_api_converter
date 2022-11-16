@@ -1,6 +1,8 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
+import { Inertia } from '@inertiajs/inertia';
+
 import {usePage} from "@inertiajs/inertia-vue3";
 
 const props = defineProps(['shops'])
@@ -39,6 +41,7 @@ function getStatus(shopStatus) {
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class=" overflow-hidden sm:rounded-lg">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+
             <div v-for="shop in shops.data"
                  class="flex flex-col bg-white rounded-xl h-52 w-72 p-4 hover:shadow transition gap-2 justify-between">
               <div class="flex flex-row items-center">
@@ -52,7 +55,7 @@ function getStatus(shopStatus) {
                     </g>
                   </svg>
                 </div>
-                <p class="">{{ shop.name }}</p>
+                <a class="" :href="route('shops.show', shop.id)"> {{ shop.name }}</a>
               </div>
               <div class="ml-10 text-xs text-gray-700 font-extralight h-full flex flex-col gap-2">
                 <p class="truncate">

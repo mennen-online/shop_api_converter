@@ -7,6 +7,8 @@ use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Shop;
 use App\Models\User;
 use App\Policies\ShopPolicy;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,7 @@ class ShopController extends Controller
 {
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return \Inertia\Response
      */
     public function index(Request $request)
     {
@@ -24,6 +26,7 @@ class ShopController extends Controller
 
         $shops = Shop::search($search)
             ->latest()
+            ->orderBy('id')
             ->select('id', 'name', 'url', 'status', 'created_at', 'updated_at')
             ->paginate(12)
             ->toArray();
@@ -34,7 +37,7 @@ class ShopController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create(Request $request)
     {
@@ -65,13 +68,20 @@ class ShopController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Shop $shop
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Request $request, Shop $shop)
     {
-        $this->authorize('view', $shop);
+        try {
+            $this->authorize('view', $shop);
+            return Inertia::render('ShopsDetail', [
+                'header' => 'Shop Information',
+                'shop' => $shop->only('id', 'name', 'url', 'status', 'created_at', 'updated_at')
+            ]);
 
-        return view('app.shops.show', compact('shop'));
+        } catch (Exception $e) {
+            Log::critical($e);
+        }
     }
 
     /**
