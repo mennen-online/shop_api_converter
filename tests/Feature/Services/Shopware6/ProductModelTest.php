@@ -87,6 +87,10 @@ class ProductModelTest extends TestCase
     {
         $entity = $this->shop->entities()->whereName(EndpointEnum::PRODUCT->name)->first();
 
+        if (! $entity) {
+            $this->markTestSkipped('Shopware 6 seems to be empty');
+        }
+
         $shopData = $entity->allShopData()
             ->inRandomOrder()
             ->first();
