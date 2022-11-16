@@ -7,7 +7,6 @@ use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class ShopEntitiesTest extends TestCase
@@ -18,13 +17,9 @@ class ShopEntitiesTest extends TestCase
     {
         parent::setUp();
 
-        $user = User::factory()->create(['email' => 'admin@admin.com']);
+        $this->artisan('db:seed');
 
-        Sanctum::actingAs($user, [], 'web');
-
-        $this->seed(\Database\Seeders\PermissionsSeeder::class);
-
-        $this->withoutExceptionHandling();
+        $this->actingAs(User::first());
     }
 
     /**
@@ -32,7 +27,7 @@ class ShopEntitiesTest extends TestCase
      */
     public function it_gets_shop_entities()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
         $entities = Entity::factory()
             ->count(2)
             ->create([
@@ -49,7 +44,7 @@ class ShopEntitiesTest extends TestCase
      */
     public function it_stores_the_shop_entities()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
         $data = Entity::factory()
             ->make([
                 'shop_id' => $shop->id,

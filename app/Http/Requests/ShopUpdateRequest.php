@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Shop\ShopTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ShopUpdateRequest extends FormRequest
 {
@@ -25,6 +27,7 @@ class ShopUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:255', 'string'],
+            'type' => ['required', new Enum(ShopTypeEnum::class)],
             'url' => ['required', 'url'],
             'credentials' => ['required', 'max:255', 'json'],
             'user_id' => ['required', 'exists:users,id'],

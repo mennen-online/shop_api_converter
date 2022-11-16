@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class EntityField extends Model
 {
@@ -17,12 +19,12 @@ class EntityField extends Model
 
     protected $table = 'entity_fields';
 
-    public function entity()
+    public function entity(): BelongsTo
     {
         return $this->belongsTo(Entity::class);
     }
 
-    public function endpoints()
+    public function endpoints(): BelongsToMany
     {
         return $this->belongsToMany(Endpoint::class);
     }

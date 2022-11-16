@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EntityCollection;
 use App\Http\Resources\EntityResource;
+use App\Models\Entity;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class ShopEntitiesController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @return EntityCollection
      */
     public function index(Request $request, Shop $shop)
     {
@@ -33,7 +34,7 @@ class ShopEntitiesController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @return EntityResource
      */
     public function store(Request $request, Shop $shop)
     {

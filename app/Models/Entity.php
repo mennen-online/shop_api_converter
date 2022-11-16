@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Scopes\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Entity extends Model
 {
@@ -15,17 +17,17 @@ class Entity extends Model
 
     protected $searchableFields = ['*'];
 
-    public function entityFields()
+    public function entityFields(): HasMany
     {
         return $this->hasMany(EntityField::class);
     }
 
-    public function allShopData()
+    public function allShopData(): HasMany
     {
         return $this->hasMany(ShopData::class);
     }
 
-    public function shop()
+    public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
     }

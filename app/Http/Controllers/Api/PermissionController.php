@@ -12,7 +12,7 @@ use Spatie\Permission\Models\Role;
 class PermissionController extends Controller
 {
     /**
-     * @return \Illuminate\Http\Response
+     * @return PermissionCollection
      */
     public function index(Request $request)
     {
@@ -26,7 +26,7 @@ class PermissionController extends Controller
 
     /**
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return PermissionResource
      */
     public function store(Request $request)
     {
@@ -47,7 +47,7 @@ class PermissionController extends Controller
 
     /**
      * @param  \Spatie\Permission\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
+     * @return PermissionResource
      */
     public function show(Permission $permission)
     {
@@ -59,7 +59,7 @@ class PermissionController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \Spatie\Permission\Models\Permission  $permission
-     * @return \Illuminate\Http\Response
+     * @return PermissionResource
      */
     public function update(Request $request, Permission $permission)
     {

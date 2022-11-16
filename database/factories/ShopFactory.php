@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Shop\ShopStatusEnum;
+use App\Enums\Shop\ShopTypeEnum;
 use App\Models\Shop;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -33,5 +34,23 @@ class ShopFactory extends Factory
             ],
             'user_id' => \App\Models\User::factory(),
         ];
+    }
+
+    public function shopware6()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'type' => ShopTypeEnum::SHOPWARE6->value,
+            ];
+        });
+    }
+
+    public function shopware5()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'type' => ShopTypeEnum::SHOPWARE5->value,
+            ];
+        });
     }
 }

@@ -145,7 +145,7 @@ return [
                     'features' => [
                         '1 Shop',
                         'bis zu 5 Endpunkte',
-                        'automatische inkrementelle Updates (optional)'
+                        'automatische inkrementelle Updates (optional)',
                     ],
                 ],
                 [
@@ -155,8 +155,8 @@ return [
                     'features' => [
                         '5 Shops',
                         '10 Endpunkte je Shop',
-                        'automatische inkrementelle Updates (optional)'
-                    ]
+                        'automatische inkrementelle Updates (optional)',
+                    ],
                 ],
                 [
                     'name' => 'Professional',
@@ -165,8 +165,8 @@ return [
                     'features' => [
                         '10 Shops',
                         '20 Endpunkte je Shop',
-                        'automatische inkrementelle Updates (optional)'
-                    ]
+                        'automatische inkrementelle Updates (optional)',
+                    ],
                 ],
                 [
                     'name' => 'Enterprise',
@@ -175,9 +175,9 @@ return [
                     'features' => [
                         'Unbegrenzt Shops',
                         'Unbegrenzte Endpunkte',
-                        'automatische inkrementelle Updates (optional)'
-                    ]
-                ]
+                        'automatische inkrementelle Updates (optional)',
+                    ],
+                ],
             ],
 
         ],

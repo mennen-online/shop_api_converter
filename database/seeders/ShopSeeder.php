@@ -14,7 +14,7 @@ class ShopSeeder extends Seeder
      */
     public function run()
     {
-        Shop::factory()
+        Shop::factory()->shopware6()
             ->count(5)
             ->createQuietly();
     }

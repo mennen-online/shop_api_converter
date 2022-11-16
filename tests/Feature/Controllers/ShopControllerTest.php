@@ -4,23 +4,21 @@ namespace Tests\Feature\Controllers;
 
 use App\Models\Shop;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ShopControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use DatabaseMigrations, WithFaker;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->actingAs(
-            User::factory()->create(['email' => 'admin@admin.com'])
+            User::first() ?? User::factory()->create(['email' => 'admin@admin.com'])
         );
-
-        $this->seed(\Database\Seeders\PermissionsSeeder::class);
 
         $this->withoutExceptionHandling();
     }
@@ -43,7 +41,7 @@ class ShopControllerTest extends TestCase
      */
     public function it_displays_index_view_with_shops()
     {
-        $shops = Shop::factory()
+        $shops = Shop::factory()->shopware6()
             ->count(5)
             ->create();
 
@@ -70,7 +68,7 @@ class ShopControllerTest extends TestCase
      */
     public function it_stores_the_shop()
     {
-        $data = Shop::factory()
+        $data = Shop::factory()->shopware6()
             ->make()
             ->toArray();
 
@@ -96,7 +94,7 @@ class ShopControllerTest extends TestCase
      */
     public function it_displays_show_view_for_shop()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $response = $this->get(route('shops.show', $shop));
 
@@ -111,7 +109,7 @@ class ShopControllerTest extends TestCase
      */
     public function it_displays_edit_view_for_shop()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $response = $this->get(route('shops.edit', $shop));
 
@@ -126,14 +124,15 @@ class ShopControllerTest extends TestCase
      */
     public function it_updates_the_shop()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $user = User::factory()->create();
 
         $data = [
             'name' => $this->faker->name,
+            'type' => $shop->type,
             'url' => $this->faker->url,
-            'credentials' => [],
+            'credentials' => $shop->credentials,
             'user_id' => $user->id,
         ];
 
@@ -142,6 +141,8 @@ class ShopControllerTest extends TestCase
         $response = $this->put(route('shops.update', $shop), $data);
 
         $data['id'] = $shop->id;
+
+        unset($data['credentials']);
 
         $this->assertDatabaseHas('shops', $data);
 
@@ -153,7 +154,7 @@ class ShopControllerTest extends TestCase
      */
     public function it_deletes_the_shop()
     {
-        $shop = Shop::factory()->create();
+        $shop = Shop::factory()->shopware6()->create();
 
         $response = $this->delete(route('shops.destroy', $shop));
 

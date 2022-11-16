@@ -2,6 +2,9 @@
 
 namespace App\Models\Scopes;
 
+use Illuminate\Database\Query\Builder;
+use Illuminate\Pagination\Paginator;
+
 trait Searchable
 {
     /**
@@ -9,13 +12,13 @@ trait Searchable
      *
      * @param  string  $search
      * @param  int  $paginationQuantity
-     * @return void
+     * @return Paginator
      */
     public function scopeSearchLatestPaginated(
         $query,
         string $search,
         $paginationQuantity = 10
-    ) {
+    ): Paginator {
         return $query
             ->search($search)
             ->orderBy('updated_at', 'desc')
@@ -26,9 +29,9 @@ trait Searchable
      * Adds a scope to search the table based on the
      * $searchableFields array inside the model
      *
-     * @param [type] $query
-     * @param [type] $search
-     * @return void
+     * @param  Builder  $query
+     * @param  string  $search
+     * @return Builder
      */
     public function scopeSearch($query, $search)
     {
@@ -48,7 +51,7 @@ trait Searchable
      *
      * @return array
      */
-    protected function getSearchableFields()
+    protected function getSearchableFields(): array
     {
         if (isset($this->searchableFields) && count($this->searchableFields)) {
             return $this->searchableFields[0] === '*'
@@ -64,7 +67,7 @@ trait Searchable
      *
      * @return array
      */
-    protected function getAllModelTableFields()
+    protected function getAllModelTableFields(): array
     {
         $tableName = $this->getTable();
 

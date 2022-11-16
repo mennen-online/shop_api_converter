@@ -14,7 +14,7 @@ class ShopController extends Controller
 {
     /**
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return ShopCollection
      */
     public function index(Request $request)
     {
@@ -31,7 +31,7 @@ class ShopController extends Controller
 
     /**
      * @param  \App\Http\Requests\ShopStoreRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return ShopResource
      */
     public function store(ShopStoreRequest $request)
     {
@@ -47,7 +47,7 @@ class ShopController extends Controller
     /**
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @return ShopResource
      */
     public function show(Request $request, Shop $shop)
     {
@@ -59,7 +59,7 @@ class ShopController extends Controller
     /**
      * @param  \App\Http\Requests\ShopUpdateRequest  $request
      * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @return ShopResource
      */
     public function update(ShopUpdateRequest $request, Shop $shop)
     {
