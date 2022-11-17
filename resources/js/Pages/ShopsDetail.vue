@@ -1,13 +1,18 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import {usePage} from "@inertiajs/inertia-vue3";
-import {reactive} from "vue";
+import {Link} from "@inertiajs/inertia-vue3";
+import ShopDetailNav from "@/Components/ShopDetail/ShopDetailNav.vue";
 
-const props = defineProps(['shop', 'header'])
+const props = defineProps(['shop', 'header', 'endpoints'])
 
 const statusBadges = {
   'not_synced': 'bg-red-100 w-24 text-sm px-2 py-1 rounded-xl text-center',
   'synced': 'bg-green-100 w-24 text-sm px-2 py-1 rounded-xl text-center'
+}
+
+function getTimestamp(date) {
+  let dateObject = new Date(date);
+  return dateObject.toLocaleString();
 }
 
 function getStatus(shopStatus) {
@@ -40,14 +45,14 @@ function getStatus(shopStatus) {
           <div class="flex flex-col w-full">
             <div class="">
               <div class="flex flex-col text-2xl font-bold">
-                <a class="mb-10 font-extralight text-sm flex flex-row items-center" :href="route('shops.index')">
+                <Link class="mb-10 font-extralight text-sm flex flex-row items-center" :href="route('shops.index')">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                     <path fill-rule="evenodd"
                           d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z"
                           clip-rule="evenodd"/>
                   </svg>
                   <p>Back to Shops</p>
-                </a>
+                </Link>
                 <div class="flex flex-row items-center">
                   <svg class="h-8 w-8 text-gray-800 mr-4" viewBox="0 0 34 34" version="1.1"
                        xmlns="http://www.w3.org/2000/svg"
@@ -63,36 +68,39 @@ function getStatus(shopStatus) {
               </div>
             </div>
             <div class="flex flex-row w-full mt-8 gap-2">
-              <nav class="w-1/6">
-                <a class="flex flex-row items-center rounded px-2 py-1 mb-3 w-full bg-gray-200 shadow">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                       stroke="currentColor" class="w-5 h-5 mr-3">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
-                  </svg>
-
-                  <p>Info</p>
-                </a>
-                <a class="flex flex-row items-center bg-gray-100 rounded px-2 py-1 w-full">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                       stroke="currentColor" class="w-5 h-5 mr-3">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
-                  </svg>
-
-                  <p>Endpoints</p>
-                </a>
-              </nav>
+              <ShopDetailNav :shop="shop"></ShopDetailNav>
 
               <div class="w-5/6 flex flex-col gap-2">
                 <div class="bg-white rounded-lg p-4">
                   <h1 class="text-2xl font-bold">{{ header }}</h1>
                 </div>
                 <div class="bg-white p-4 rounded-lg">
-                  <p>{{ shop.name }}</p>
-                  <p>{{ shop.id }}</p>
-                  <p>{{ shop.status }}</p>
-                  <p>{{ shop.url }}</p>
+                  <section v-if="route().current('shops.show')">
+                    <p>{{ shop.name }}</p>
+                    <p>{{ shop.id }}</p>
+                    <p>{{ shop.status }}</p>
+                    <p>{{ shop.url }}</p>
+                  </section>
+
+                  <section v-if="route().current('shops.endpoints.index')" class="flex flex-col">
+                    <div>
+                      <table class="table-auto w-full">
+                        <tr class="text-gray-400">
+                          <th class="pb-1">ID</th>
+                          <th class="pb-1">Name</th>
+                          <th class="pb-1">URL</th>
+                          <th class="pb-1">Last fetched</th>
+                        </tr>
+                        <tr v-for="endpoint in endpoints" class="text-sm text-gray-700 text-center border-t">
+                          <td class="p-2">{{ endpoint.id }}</td>
+                          <td class="p-2">{{ endpoint.name }}</td>
+                          <td class="p-2">{{ endpoint.url }}</td>
+                          <td class="p-2">{{ getTimestamp(endpoint.updated_at) }}</td>
+                        </tr>
+
+                      </table>
+                    </div>
+                  </section>
                 </div>
               </div>
             </div>

@@ -36,9 +36,10 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
     Route::resources([
         'shops' => ShopController::class,
-        'endpoints' => EndpointController::class,
+        'shops.endpoints' => EndpointController::class,
         'permissions' => PermissionController::class,
         'roles' => RoleController::class,
     ]);

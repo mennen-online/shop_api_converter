@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Welcome from '@/Components/Welcome.vue';
+import {Link} from "@inertiajs/inertia-vue3";
 import { Inertia } from '@inertiajs/inertia';
 
 import {usePage} from "@inertiajs/inertia-vue3";
@@ -55,7 +56,7 @@ function getStatus(shopStatus) {
                     </g>
                   </svg>
                 </div>
-                <a class="" :href="route('shops.show', shop.id)"> {{ shop.name }}</a>
+                <Link class="" :href="route('shops.show', shop.id)"> {{ shop.name }}</Link>
               </div>
               <div class="ml-10 text-xs text-gray-700 font-extralight h-full flex flex-col gap-2">
                 <p class="truncate">
