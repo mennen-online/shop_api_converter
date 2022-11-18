@@ -1,10 +1,10 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import Welcome from '@/Components/Welcome.vue';
 import {Link} from "@inertiajs/inertia-vue3";
-import { Inertia } from '@inertiajs/inertia';
+import DialogModal from "@/Components/DialogModal.vue";
+import {ref} from 'vue';
 
-import {usePage} from "@inertiajs/inertia-vue3";
+const showModal = ref(false);
 
 const props = defineProps(['shops'])
 
@@ -37,17 +37,73 @@ function getStatus(shopStatus) {
         Shops
       </h2>
     </template>
+    <DialogModal :show="showModal">
+      <template #title>
+        <div class="flex flex-row justify-between items-center">
+          <h1 class="font-bold text-xl">
+            Create Shop
+          </h1>
+          <button @click="showModal = false" class="text-gray-600 hover:text-gray-900">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
 
+          </button>
+        </div>
+      </template>
+      <template #content>
+        Content
+      </template>
+      <template #footer>
+        <div class="flex flex-row justify-end">
+          <button class="transition bg-white px-4 py-2 rounded-lg border bg-violet-500 hover:bg-violet-600 font-bold text-white" @click="">
+            Create Shop
+          </button>
+        </div>
+      </template>
+
+    </DialogModal>
     <div class="py-12">
+
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class=" overflow-hidden sm:rounded-lg">
+          <div class="flex flex-row mb-6 justify-between">
+            <div
+                class="flex flex-row border rounded-xl overflow-hidden items-center bg-white text-gray-400 focus-within:text-gray-600 transition">
+              <span class="ml-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                  <path fill-rule="evenodd"
+                        d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                        clip-rule="evenodd"/>
+                </svg>
+
+              </span>
+              <input type="text" class="appearance-none border-none py-4 px-2 focus:ring-0 h-6 text-sm">
+            </div>
+            <div>
+
+              <button @click="showModal = true" @close="showModal = false" class="bg-white flex flex-row font-semibold py-2 px-4 rounded-lg border">
+                  <span class="mr-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                       class="w-5 h-5">
+                    <path
+                        d="M2.879 7.121A3 3 0 007.5 6.66a2.997 2.997 0 002.5 1.34 2.997 2.997 0 002.5-1.34 3 3 0 104.622-3.78l-.293-.293A2 2 0 0015.415 2H4.585a2 2 0 00-1.414.586l-.292.292a3 3 0 000 4.243zM3 9.032a4.507 4.507 0 004.5-.29A4.48 4.48 0 0010 9.5a4.48 4.48 0 002.5-.758 4.507 4.507 0 004.5.29V16.5h.25a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75v-3.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75v3.5a.75.75 0 01-.75.75h-4.5a.75.75 0 010-1.5H3V9.032z"/>
+                  </svg>
+                  </span>
+
+                <p>Create Shop</p>
+              </button>
+
+            </div>
+          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
 
             <div v-for="shop in shops.data"
-                 class="flex flex-col bg-white rounded-xl h-52 w-72 p-4 hover:shadow transition gap-2 justify-between">
+                 class="flex flex-col bg-white rounded-xl border h-52 w-72 p-4 hover:shadow transition gap-2 justify-between">
               <div class="flex flex-row items-center">
                 <div>
-                  <svg class="h-7 w-7 text-gray-800 mr-3" viewBox="0 0 34 34" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                  <svg class="h-7 w-7 text-gray-800 mr-3" viewBox="0 0 34 34" version="1.1"
+                       xmlns="http://www.w3.org/2000/svg"
                        xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="icon-shopware-5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                       <path
