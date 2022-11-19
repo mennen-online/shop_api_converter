@@ -7,30 +7,35 @@ use App\Http\Requests\EndpointUpdateRequest;
 use App\Models\Endpoint;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class EndpointController extends Controller
 {
     /**
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Shop $shop)
     {
         $this->authorize('view-any', Endpoint::class);
 
         $search = $request->get('search', '');
 
         $endpoints = Endpoint::search($search)
-            ->latest()
+            ->whereShopId($shop->id)
             ->paginate(5)
-            ->withQueryString();
+            ->toArray();
 
-        return view('app.endpoints.index', compact('endpoints', 'search'));
+        return Inertia::render('ShopsDetail', [
+            'header' => 'Endpoints',
+            'shop' => $shop->only('id', 'name', 'url', 'status', 'created_at', 'updated_at'),
+            'endpoints' => $endpoints['data']
+        ]);
     }
 
     /**
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create(Request $request)
     {
