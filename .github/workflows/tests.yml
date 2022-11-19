@@ -36,9 +36,6 @@ jobs:
       - name: Config Laravel Spark
         run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
 
-      - name: Create required directories
-        run: mkdir storage/framework storage/framework/cache storage/framework/sessions storage/framework/testing storage/framework/views
-
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
