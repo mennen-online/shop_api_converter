@@ -27,7 +27,7 @@ class ShopController extends Controller
         $shops = Shop::search($search)
             ->latest()
             ->orderBy('id')
-            ->select('id', 'name', 'url', 'status', 'created_at', 'updated_at')
+            ->select('id', 'name', 'type', 'url', 'status', 'created_at', 'updated_at')
             ->paginate(12)
             ->toArray();
 
@@ -76,7 +76,7 @@ class ShopController extends Controller
             $this->authorize('view', $shop);
             return Inertia::render('ShopsDetail', [
                 'header' => 'Shop Information',
-                'shop' => $shop->only('id', 'name', 'url', 'status', 'created_at', 'updated_at')
+                'shop' => $shop->only('id', 'name', 'type', 'url', 'status', 'created_at', 'updated_at')
             ]);
 
         } catch (Exception $e) {

@@ -17,5 +17,9 @@ class ShopSeeder extends Seeder
         Shop::factory()->shopware6()
             ->count(5)
             ->createQuietly();
+
+        Shop::factory()->shopware5()
+            ->count(5)
+            ->createQuietly();
     }
 }

@@ -28,7 +28,7 @@ class EndpointController extends Controller
 
         return Inertia::render('ShopsDetail', [
             'header' => 'Endpoints',
-            'shop' => $shop->only('id', 'name', 'url', 'status', 'created_at', 'updated_at'),
+            'shop' => $shop->only('id', 'name','type', 'url', 'status', 'created_at', 'updated_at'),
             'endpoints' => $endpoints['data']
         ]);
     }
