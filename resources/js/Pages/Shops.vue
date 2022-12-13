@@ -2,10 +2,21 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {Link} from "@inertiajs/inertia-vue3";
 import DialogModal from "@/Components/DialogModal.vue";
-import {ref} from 'vue';
+import {ref, reactive} from 'vue';
+import {Inertia} from "@inertiajs/inertia";
 
-const showModal = ref(false);
+let showModal = ref(false);
 const selected_shopType = ref('')
+
+const form = reactive({
+  shopName: null,
+  shopUrl: null,
+  shopType: selected_shopType,
+  shopUsername: null,
+  shopApiToken: null,
+  shopClientID: null,
+  shopClientID: null
+});
 
 const props = defineProps(['shops'])
 
@@ -14,6 +25,10 @@ const statusBadges = {
   'synced': 'bg-green-100 w-24 text-sm px-2 py-1 rounded-xl text-center'
 }
 
+function submitForm() {
+  showModal = false;
+  Inertia.post('/shops', form);
+}
 
 function getStatus(shopStatus) {
   switch (shopStatus) {
@@ -36,6 +51,7 @@ function getStatus(shopStatus) {
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Shops
+        {{$page.props.flash.message}}
       </h2>
     </template>
     <DialogModal :show="showModal">
@@ -54,20 +70,20 @@ function getStatus(shopStatus) {
         </div>
       </template>
       <template #content>
-        <form class="flex flex-col">
+        <form @submit.prevent="submitForm" id="createShopForm" class="flex flex-col">
           <label class="mb-2" for="shop_name">Shop name</label>
-          <input id="shop_name" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+          <input id="shop_name" v-model="form.shopName" required class="mb-4 rounded-lg focus:ring-0 transition" type="text">
           <label class="mb-2" for="shop_url">Shop URL</label>
-          <input id="shop_name" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
-          <label for="shop_name" class="mb-1">Select Shop Type</label>
+          <input id="shop_url" v-model="form.shopUrl" required class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+          <label for="shop_type" class="mb-1">Select Shop Type</label>
           <div class="flex flex-col mb-4">
             <div>
-              <input id="shopware6" v-model="selected_shopType" class="mr-2" name="shopware_type" type="radio"
+              <input id="shopware6" v-model="selected_shopType" required class="mr-2" name="shop_type" type="radio"
                      value="shopware6">
               <label for="shopware6">Shopware 6</label>
             </div>
             <div>
-              <input id="shopware5" v-model="selected_shopType" class="mr-2" name="shopware_type" type="radio"
+              <input id="shopware5" v-model="selected_shopType" required class="mr-2" name="shop_type" type="radio"
                      value="shopware5">
               <label for="shopware5">Shopware 5</label>
 
@@ -76,15 +92,15 @@ function getStatus(shopStatus) {
           <h1 v-if="selected_shopType" class="font-bold text-2xl mb-2">Credentials</h1>
           <div v-if="selected_shopType === 'shopware5'" class="flex flex-col">
             <label class="mb-1" for="s5_username">Username</label>
-            <input id="s5_username" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s5_username" required v-model="form.shopUsername" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
             <label class="mb-1" for="s5_apikey">API Key</label>
-            <input id="s5_apikey" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s5_apikey" required v-model="form.shopApiToken" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
           </div>
           <div v-if="selected_shopType === 'shopware6'" class="flex flex-col">
             <label class="mb-1" for="s6_id">Client ID</label>
-            <input id="s6_id" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s6_id" required v-model="form.shopClientID" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
             <label class="mb-1" for="s6_secret">Client Secret</label>
-            <input id="s6_secret" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s6_secret" required v-model="form.shopClientSecret" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
           </div>
         </form>
       </template>
@@ -92,9 +108,8 @@ function getStatus(shopStatus) {
         <div class="flex flex-row justify-end">
           <button
               class="transition bg-white px-4 py-2 rounded-lg border bg-violet-500 hover:bg-violet-600 font-bold text-white"
-              @click="">
-            Create Shop
-          </button>
+              type="submit"
+              form="createShopForm">Create Shop</button>
         </div>
       </template>
 

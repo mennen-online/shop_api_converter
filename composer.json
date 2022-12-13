@@ -13,7 +13,6 @@
         "inertiajs/inertia-laravel": "^0.6.3",
         "laravel/framework": "^9.19",
         "laravel/jetstream": "^2.9",
-        "laravel/nova": "^4.17",
         "laravel/sanctum": "^3.0",
         "laravel/spark-stripe": "^2.5",
         "laravel/tinker": "^2.7",
@@ -75,10 +74,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://nova.laravel.com"
-        },
         {
             "type": "composer",
             "url": "https://spark.laravel.com"

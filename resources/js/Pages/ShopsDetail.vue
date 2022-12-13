@@ -33,7 +33,7 @@ function getStatus(shopStatus) {
 </script>
 
 <template>
-  <AppLayout title="Server Overview">
+  <AppLayout :title="shop.name">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Shops
@@ -86,18 +86,24 @@ function getStatus(shopStatus) {
               <div class="w-5/6 flex flex-col gap-2">
                 <div class="bg-white rounded-lg p-4 flex flex-row justify-between items-center">
                   <h1 class="text-2xl font-bold">{{ header }}</h1>
-                  <Dropdown width="100" class="">
+                  <Dropdown class="" width="100">
                     <template #trigger>
                       <button class="flex items-center ">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
+                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round"
+                                stroke-linejoin="round"/>
                         </svg>
 
                       </button>
                     </template>
-                    <template #content >
+                    <template #content>
                       <div class="w-32 text-center">
-                        <Link class="px-2 py-1 hover:bg-gray-100 transition w-full" :href="route('shops.destroy', shop.id)" as="button" method="delete">Delete Shop</Link>
+                        <Link :href="route('shops.destroy', shop.id)"
+                              as="button"
+                              class="px-2 py-1 hover:bg-gray-100 transition w-full" method="delete">Delete
+                          Shop
+                        </Link>
                       </div>
                     </template>
                   </Dropdown>
