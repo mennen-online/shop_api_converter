@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {Link} from "@inertiajs/inertia-vue3";
 import DialogModal from "@/Components/DialogModal.vue";
-import {ref, reactive} from 'vue';
+import {reactive, ref} from 'vue';
 import {Inertia} from "@inertiajs/inertia";
 
 let showModal = ref(false);
@@ -51,7 +51,6 @@ function getStatus(shopStatus) {
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Shops
-        {{$page.props.flash.message}}
       </h2>
     </template>
     <DialogModal :show="showModal">
@@ -70,20 +69,22 @@ function getStatus(shopStatus) {
         </div>
       </template>
       <template #content>
-        <form @submit.prevent="submitForm" id="createShopForm" class="flex flex-col">
+        <form id="createShopForm" class="flex flex-col" @submit.prevent="submitForm">
           <label class="mb-2" for="shop_name">Shop name</label>
-          <input id="shop_name" v-model="form.shopName" required class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+          <input id="shop_name" v-model="form.shopName" class="mb-4 rounded-lg focus:ring-0 transition" required
+                 type="text">
           <label class="mb-2" for="shop_url">Shop URL</label>
-          <input id="shop_url" v-model="form.shopUrl" required class="mb-4 rounded-lg focus:ring-0 transition" type="text">
-          <label for="shop_type" class="mb-1">Select Shop Type</label>
+          <input id="shop_url" v-model="form.shopUrl" class="mb-4 rounded-lg focus:ring-0 transition" required
+                 type="text">
+          <label class="mb-1" for="shop_type">Select Shop Type</label>
           <div class="flex flex-col mb-4">
             <div>
-              <input id="shopware6" v-model="selected_shopType" required class="mr-2" name="shop_type" type="radio"
+              <input id="shopware6" v-model="selected_shopType" class="mr-2" name="shop_type" required type="radio"
                      value="shopware6">
               <label for="shopware6">Shopware 6</label>
             </div>
             <div>
-              <input id="shopware5" v-model="selected_shopType" required class="mr-2" name="shop_type" type="radio"
+              <input id="shopware5" v-model="selected_shopType" class="mr-2" name="shop_type" required type="radio"
                      value="shopware5">
               <label for="shopware5">Shopware 5</label>
 
@@ -92,15 +93,19 @@ function getStatus(shopStatus) {
           <h1 v-if="selected_shopType" class="font-bold text-2xl mb-2">Credentials</h1>
           <div v-if="selected_shopType === 'shopware5'" class="flex flex-col">
             <label class="mb-1" for="s5_username">Username</label>
-            <input id="s5_username" required v-model="form.shopUsername" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s5_username" v-model="form.shopUsername" class="mb-4 rounded-lg focus:ring-0 transition" required
+                   type="text">
             <label class="mb-1" for="s5_apikey">API Key</label>
-            <input id="s5_apikey" required v-model="form.shopApiToken" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s5_apikey" v-model="form.shopApiToken" class="mb-4 rounded-lg focus:ring-0 transition" required
+                   type="text">
           </div>
           <div v-if="selected_shopType === 'shopware6'" class="flex flex-col">
             <label class="mb-1" for="s6_id">Client ID</label>
-            <input id="s6_id" required v-model="form.shopClientID" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s6_id" v-model="form.shopClientID" class="mb-4 rounded-lg focus:ring-0 transition" required
+                   type="text">
             <label class="mb-1" for="s6_secret">Client Secret</label>
-            <input id="s6_secret" required v-model="form.shopClientSecret" class="mb-4 rounded-lg focus:ring-0 transition" type="text">
+            <input id="s6_secret" v-model="form.shopClientSecret" class="mb-4 rounded-lg focus:ring-0 transition"
+                   required type="text">
           </div>
         </form>
       </template>
@@ -108,8 +113,9 @@ function getStatus(shopStatus) {
         <div class="flex flex-row justify-end">
           <button
               class="transition bg-white px-4 py-2 rounded-lg border bg-violet-500 hover:bg-violet-600 font-bold text-white"
-              type="submit"
-              form="createShopForm">Create Shop</button>
+              form="createShopForm"
+              type="submit">Create Shop
+          </button>
         </div>
       </template>
 
@@ -148,6 +154,37 @@ function getStatus(shopStatus) {
 
             </div>
           </div>
+          <div v-if="$page.props.flash.message"
+               :class="[$page.props.flash.message.type === 'success' ? 'bg-green-200' : 'bg-red-200']"
+               class="w-full h-full rounded-xl mb-6 p-4 flex flex-row justify-between">
+            <div>
+              <div v-if="$page.props.flash.message.type === 'success'" class="flex flex-row items-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p>{{ $page.props.flash.message.text }}</p>
+              </div>
+              <div v-if="$page.props.flash.message.type === 'error'" class="flex flex-row items-center gap-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" stroke-linecap="round"
+                        stroke-linejoin="round"/>
+                </svg>
+
+                <p>{{ $page.props.flash.message.text }}</p>
+              </div>
+
+            </div>
+
+            <button @click="$page.props.flash.message = null">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
+              </svg>
+            </button>
+          </div>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
 
             <div v-for="shop in shops.data"

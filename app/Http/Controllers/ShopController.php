@@ -73,18 +73,7 @@ class ShopController extends Controller
         }
 
 
-        try {
-            Shop::create(
-                [
-                    'name' => $shopInfo->shopName,
-                    'url' => $shopInfo->shopUrl,
-                    'type' => $shopType,
-                    'status' => ShopStatusEnum::NOT_SYNCED->value,
-                    'user_id' => $request->user()->id,
-                    'credentials' => $credentials
-                ]
-            );
-        } catch (Exception $e) {
+        if (Shop::where('url', $shopInfo->shopUrl)->exists()) {
             return $route->with([
                 'message' => [
                     'title' => 'Error!',
@@ -93,6 +82,18 @@ class ShopController extends Controller
                 ]
             ]);
         }
+
+        Shop::updateOrCreate(
+            [
+                'name' => $shopInfo->shopName,
+                'url' => $shopInfo->shopUrl,
+                'type' => $shopType,
+                'status' => ShopStatusEnum::NOT_SYNCED->value,
+                'user_id' => $request->user()->id,
+                'credentials' => $credentials
+            ]
+        );
+
 
         return $route->with([
             'message' => [
