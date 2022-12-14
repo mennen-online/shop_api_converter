@@ -25,7 +25,7 @@ class ShopObserver
         ]);
 
         if (! app()->environment('testing')) {
-            SyncShopDataJob::dispatch($shop, (new ShopDataSyncServiceEndpointLoader())($shop));
+            SyncShopDataJob::dispatch($shop, new ShopDataSyncServiceEndpointLoader());
 
             $shop->update([
                 'status' => ShopStatusEnum::QUEUED->value,
