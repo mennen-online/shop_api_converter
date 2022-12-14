@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {Link} from "@inertiajs/inertia-vue3";
 import DialogModal from "@/Components/DialogModal.vue";
-import {defineProps, reactive, ref} from 'vue';
+import {reactive, ref} from 'vue';
 import {Inertia} from "@inertiajs/inertia";
 
 let showModal = ref(false);
@@ -15,7 +15,7 @@ const form = reactive({
   shopUsername: null,
   shopApiToken: null,
   shopClientID: null,
-  shopClientID: null
+  shopClientSecret: null
 });
 
 const props = defineProps(['shops'])

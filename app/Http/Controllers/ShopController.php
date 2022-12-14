@@ -58,16 +58,16 @@ class ShopController extends Controller
             case 'shopware5':
                 $shopType = ShopTypeEnum::SHOPWARE5->value;
                 $credentials = [
-                    'username' => $shopInfo->shopUsername,
-                    'api_key' => $shopInfo->shopApiToken,
+                    'api_key' => $shopInfo->shopUsername,
+                    'api_secret' => $shopInfo->shopApiToken,
 
                 ];
                 break;
             case 'shopware6':
                 $shopType = ShopTypeEnum::SHOPWARE6->value;
                 $credentials = [
-                    'clientID' => $shopInfo->shopClientID,
-                    'clientSecret' => $shopInfo->shopClientSecret,
+                    'api_key' => $shopInfo->shopClientID,
+                    'api_secret' => $shopInfo->shopClientSecret,
                 ];
                 break;
         }
