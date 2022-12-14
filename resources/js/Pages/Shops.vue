@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {Link} from "@inertiajs/inertia-vue3";
 import DialogModal from "@/Components/DialogModal.vue";
-import {reactive, ref} from 'vue';
+import {defineProps, reactive, ref} from 'vue';
 import {Inertia} from "@inertiajs/inertia";
 
 let showModal = ref(false);
@@ -20,6 +20,9 @@ const form = reactive({
 
 const props = defineProps(['shops'])
 
+const currentPage = props.shops['current_page'];
+const lastPage = props.shops['last_page'];
+
 const statusBadges = {
   'not_synced': 'bg-red-100 w-24 text-sm px-2 py-1 rounded-xl text-center',
   'synced': 'bg-green-100 w-24 text-sm px-2 py-1 rounded-xl text-center'
@@ -28,6 +31,18 @@ const statusBadges = {
 function submitForm() {
   showModal = false;
   Inertia.post('/shops', form);
+}
+
+function nextPage() {
+  if(currentPage !== lastPage) {
+    Inertia.visit('/shops?page=' + (currentPage+1));
+  }
+}
+
+function prevPage() {
+  if(currentPage > 1) {
+    Inertia.visit('/shops?page=' + (currentPage-1));
+  }
 }
 
 function getStatus(shopStatus) {
@@ -137,6 +152,22 @@ function getStatus(shopStatus) {
               </span>
               <input class="appearance-none border-none py-4 px-2 focus:ring-0 h-6 text-sm" type="text">
             </div>
+            <div class="flex flex-row justify-center items-center">
+              <button @click="prevPage">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.75 19.5L8.25 12l7.5-7.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <p class="px-1 text-lg">{{ currentPage }}</p>
+              <button @click="nextPage">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.25 4.5l7.5 7.5-7.5 7.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+
+            </div>
             <div>
 
               <button class="bg-white flex flex-row font-semibold py-2 px-4 rounded-lg border" @click="showModal = true"
@@ -153,6 +184,7 @@ function getStatus(shopStatus) {
               </button>
 
             </div>
+
           </div>
           <div v-if="$page.props.flash.message"
                :class="[$page.props.flash.message.type === 'success' ? 'bg-green-200' : 'bg-red-200']"
@@ -168,7 +200,8 @@ function getStatus(shopStatus) {
               <div v-if="$page.props.flash.message.type === 'error'" class="flex flex-row items-center gap-3">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
                      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" stroke-linecap="round"
+                  <path d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                        stroke-linecap="round"
                         stroke-linejoin="round"/>
                 </svg>
 
