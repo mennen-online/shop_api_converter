@@ -25,7 +25,11 @@ const lastPage = props.shops['last_page'];
 
 const statusBadges = {
   'not_synced': 'bg-red-100 w-24 text-sm px-2 py-1 rounded-xl text-center',
-  'synced': 'bg-green-100 w-24 text-sm px-2 py-1 rounded-xl text-center'
+  'failed': 'bg-red-500 text-white font-extrabold w-24 text-sm px-2 py-1 rounded-xl text-center',
+  'finished': 'bg-green-500 text-white font-extrabold w-24 text-sm px-2 py-1 rounded-xl text-center',
+  'enqueued': 'bg-yellow-300 font-bold w-24 text-sm px-2 py-1 rounded-xl text-center',
+  'running': 'bg-green-300 font-bold w-24 text-sm px-2 py-1 rounded-xl text-center',
+  'unknown': 'bg-orange-200 font-bold w-32 text-sm px-2 py-1 rounded-xl text-center',
 }
 
 function submitForm() {
@@ -52,10 +56,34 @@ function getStatus(shopStatus) {
         status: 'Not synced',
         class: statusBadges.not_synced
       }
-    case 'synced':
+    case 'finished':
       return {
         status: 'Synced',
-        class: statusBadges.synced
+        class: statusBadges.finished
+      }
+    case 'queued': {
+      return {
+        status: 'Enqueued',
+        class: statusBadges.enqueued
+      }
+    }
+    case 'running': {
+      return {
+        status: 'Syncing',
+        class: statusBadges.running
+      }
+    }
+    case 'failed': {
+      return {
+        status: 'Sync failed',
+        class: statusBadges.failed
+      }
+    }
+    default: {
+        return {
+          status: 'Unknown Status',
+          class: statusBadges.unknown
+        }
       }
   }
 }
