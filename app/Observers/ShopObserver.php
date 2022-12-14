@@ -8,6 +8,7 @@ use App\Models\Shop;
 use App\Notifications\Shop\ShopSyncFailedNotification;
 use App\Notifications\Shop\ShopSyncQueuedNotification;
 use App\Notifications\Shop\ShopSyncStartedNotification;
+use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
 
 class ShopObserver
 {
@@ -24,7 +25,7 @@ class ShopObserver
         ]);
 
         if (! app()->environment('testing')) {
-            SyncShopDataJob::dispatch($shop);
+            SyncShopDataJob::dispatch($shop, (new ShopDataSyncServiceEndpointLoader())($shop));
 
             $shop->update([
                 'status' => ShopStatusEnum::QUEUED->value,
