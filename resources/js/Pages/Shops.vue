@@ -75,7 +75,7 @@ function getStatus(shopStatus) {
                  type="text">
           <label class="mb-2" for="shop_url">Shop URL</label>
           <input id="shop_url" v-model="form.shopUrl" class="mb-4 rounded-lg focus:ring-0 transition" required
-                 type="text">
+                 type="url">
           <label class="mb-1" for="shop_type">Select Shop Type</label>
           <div class="flex flex-col mb-4">
             <div>
