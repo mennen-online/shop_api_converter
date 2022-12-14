@@ -34,14 +34,14 @@ function submitForm() {
 }
 
 function nextPage() {
-  if(currentPage !== lastPage) {
-    Inertia.visit('/shops?page=' + (currentPage+1));
+  if (currentPage !== lastPage) {
+    Inertia.visit('/shops?page=' + (currentPage + 1));
   }
 }
 
 function prevPage() {
-  if(currentPage > 1) {
-    Inertia.visit('/shops?page=' + (currentPage-1));
+  if (currentPage > 1) {
+    Inertia.visit('/shops?page=' + (currentPage - 1));
   }
 }
 
@@ -64,7 +64,7 @@ function getStatus(shopStatus) {
 <template>
   <AppLayout title="Server Overview">
     <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+      <h2 class="semibold text-xl text-gray-800 leading-tight">
         Shops
       </h2>
     </template>
@@ -180,8 +180,9 @@ function getStatus(shopStatus) {
                   </svg>
                   </span>
 
-                <p>Create Shop</p>
+                Create Shop
               </button>
+
 
             </div>
 
