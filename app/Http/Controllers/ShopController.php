@@ -21,7 +21,7 @@ use Inertia\Inertia;
 class ShopController extends Controller
 {
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return \Inertia\Response
      */
     public function index(Request $request)
@@ -41,7 +41,7 @@ class ShopController extends Controller
     }
 
     /**
-     * @param ShopStoreRequest $request
+     * @param  ShopStoreRequest  $request
      * @return RedirectResponse
      */
     public function store(Request $request)
@@ -58,8 +58,8 @@ class ShopController extends Controller
             case 'shopware5':
                 $shopType = ShopTypeEnum::SHOPWARE5->value;
                 $credentials = [
-                    'api_key' => $shopInfo->shopUsername,
-                    'api_secret' => $shopInfo->shopApiToken,
+                    'username' => $shopInfo->shopUsername,
+                    'password' => $shopInfo->shopApiToken,
 
                 ];
                 break;
@@ -72,14 +72,13 @@ class ShopController extends Controller
                 break;
         }
 
-
         if (Shop::where('url', $shopInfo->shopUrl)->exists()) {
             return $route->with([
                 'message' => [
                     'title' => 'Error!',
                     'text' => 'Shop creation failed!',
                     'type' => 'error',
-                ]
+                ],
             ]);
         }
 
@@ -90,24 +89,21 @@ class ShopController extends Controller
                 'type' => $shopType,
                 'status' => ShopStatusEnum::NOT_SYNCED->value,
                 'user_id' => $request->user()->id,
-                'credentials' => $credentials
+                'credentials' => $credentials,
             ]
         );
-
 
         return $route->with([
             'message' => [
                 'title' => 'Success!',
                 'text' => 'Shop created successfully',
                 'type' => 'success',
-            ]
+            ],
         ]);
-
-
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return Application|Factory|View
      */
     public function create(Request $request)
@@ -120,27 +116,27 @@ class ShopController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Shop $shop
+     * @param  Request  $request
+     * @param  Shop  $shop
      * @return \Inertia\Response
      */
     public function show(Request $request, Shop $shop)
     {
         try {
             $this->authorize('view', $shop);
+
             return Inertia::render('ShopsDetail', [
                 'header' => 'Shop Information',
-                'shop' => $shop->only('id', 'name', 'type', 'url', 'status', 'created_at', 'updated_at')
+                'shop' => $shop->only('id', 'name', 'type', 'url', 'status', 'created_at', 'updated_at'),
             ]);
-
         } catch (Exception $e) {
             Log::critical($e);
         }
     }
 
     /**
-     * @param Request $request
-     * @param Shop $shop
+     * @param  Request  $request
+     * @param  Shop  $shop
      * @return Response
      */
     public function edit(Request $request, Shop $shop)
@@ -153,8 +149,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param ShopUpdateRequest $request
-     * @param Shop $shop
+     * @param  ShopUpdateRequest  $request
+     * @param  Shop  $shop
      * @return Response
      */
     public function update(ShopUpdateRequest $request, Shop $shop)
@@ -175,8 +171,8 @@ class ShopController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Shop $shop
+     * @param  Request  $request
+     * @param  Shop  $shop
      * @return Response
      */
     public function destroy(Request $request, Shop $shop)

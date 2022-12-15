@@ -42,7 +42,7 @@ class EndpointControllerTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertInertia(fn(Assert $page) => $page
+            ->assertInertia(fn (Assert $page) => $page
                 ->component('ShopsDetail')
             );
     }
@@ -56,7 +56,7 @@ class EndpointControllerTest extends TestCase
         $response = $this->get(route('shops.endpoints.create', ['shop' => $shop->id]));
 
         $response->assertOk()
-            ->assertInertia(fn(Assert $page) => $page->component('ShopsDetail'));
+            ->assertInertia(fn (Assert $page) => $page->component('ShopsDetail'));
     }
 
     /**

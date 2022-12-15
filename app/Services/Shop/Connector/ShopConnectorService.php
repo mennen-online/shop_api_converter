@@ -20,8 +20,8 @@ class ShopConnectorService
             ),
             ShopTypeEnum::SHOPWARE5->value => new Shopware5Endpoint(
                 url: $shop->url,
-                client_id: $shop->credentials->api_key,
-                client_secret: $shop->credentials->api_secret,
+                username: $shop->credentials->username,
+                password: $shop->credentials->password,
                 endpoint: $endpointEnum
             )
         };

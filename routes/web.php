@@ -43,5 +43,4 @@ Route::middleware([
         'permissions' => PermissionController::class,
         'roles' => RoleController::class,
     ]);
-
 });
