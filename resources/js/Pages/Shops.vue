@@ -80,11 +80,11 @@ function getStatus(shopStatus) {
       }
     }
     default: {
-        return {
-          status: 'Unknown Status',
-          class: statusBadges.unknown
-        }
+      return {
+        status: 'Unknown Status',
+        class: statusBadges.unknown
       }
+    }
   }
 }
 </script>
