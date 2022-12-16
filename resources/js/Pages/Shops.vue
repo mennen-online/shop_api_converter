@@ -4,6 +4,7 @@ import {Link} from "@inertiajs/inertia-vue3";
 import DialogModal from "@/Components/DialogModal.vue";
 import {reactive, ref} from 'vue';
 import {Inertia} from "@inertiajs/inertia";
+import PrimaryButton from "../Components/PrimaryButton.vue";
 
 let showModal = ref(false);
 const selected_shopType = ref('')
@@ -86,6 +87,10 @@ function getStatus(shopStatus) {
       }
     }
   }
+}
+
+function syncShop(id) {
+  Inertia.get('/shops/' + id + '/sync')
 }
 </script>
 
@@ -281,6 +286,9 @@ function getStatus(shopStatus) {
                 </p>
                 <p>
                   {{ shop.created_at }}
+                </p>
+                <p>
+                  <primary-button type="button" v-on:click="syncShop(shop.id)">Resync</primary-button>
                 </p>
               </div>
               <div :var="response = getStatus(shop.status)" class="">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShopSyncController;
 use App\Http\Controllers\EndpointController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -43,4 +44,6 @@ Route::middleware([
         'permissions' => PermissionController::class,
         'roles' => RoleController::class,
     ]);
+
+    Route::get('/shops/{shop}/sync', [ShopController::class, 'sync'])->name('shop.sync');
 });

@@ -4,16 +4,14 @@ namespace App\Jobs\ShopData;
 
 use App\Enums\Shop\ShopStatusEnum;
 use App\Models\Shop;
-use App\Services\Shop\Connector\ShopConnectorService;
 use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
-use App\Services\ShopData\ShopDataSyncServiceLoader;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SyncShopDataJob implements ShouldQueue
 {
@@ -43,25 +41,20 @@ class SyncShopDataJob implements ShouldQueue
             ]
         );
 
-        foreach ($this->endpointLoader->getEndpointEnumCasesForShop($this->shop) as $endpoint) {
-            $connector = (new ShopConnectorService())->getConnector($this->shop, $endpoint);
+        $batch = collect($this->endpointLoader->getEndpointEnumCasesForShop($this->shop))
+            ->map(fn($endpoint) => new SyncShopDataEntity($this->shop, $endpoint));
 
-            try {
-                $collection = $connector->getAll(app()->environment('testing') ? 10 : null);
-            } catch(NotFoundHttpException $exception) {
-                Log::warning("Endpoint $endpoint->name not found");
+        $shop = $this->shop;
 
-                continue;
-            }
-
-            if ($collection->data) {
-                ((new ShopDataSyncServiceLoader())($this->shop))($this->shop, new ShopConnectorService(), $endpoint->name, $collection->data);
-            } else {
-                Log::info($endpoint->name . " Response Collection Empty", [
-                    'shop' => $this->shop
-                ]);
-            }
-        }
+        Bus::batch($batch->toArray())
+            ->onQueue('sync')
+            ->allowFailures()
+            ->name($this->shop->name . ' Sync Batch')
+            ->finally(function() use($shop) {
+            $shop->update([
+                'status' => ShopStatusEnum::FINISHED->value
+            ]);
+        })->dispatch();
     }
 
     public function failed($exception) {

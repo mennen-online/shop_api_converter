@@ -8,6 +8,7 @@ use App\Services\Shop\Connector\ShopConnectorService;
 use App\Services\ShopData\ShopDataSyncServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use MennenOnline\LaravelResponseModels\Models\BaseModel;
 use MennenOnline\Shopware5ApiConnector\Enums\EndpointEnum;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -32,7 +33,7 @@ class Shopware5ShopDataSyncService implements ShopDataSyncServiceInterface
             throw new ShopSyncFailedException("First Element for $endpoint is null", 419);
         }
 
-        if (! is_object($element)) {
+        if (! is_object($element) && ! $element instanceof BaseModel) {
             $collection->each(function ($value, $key) use ($entity) {
                 $entity->entityFields()->updateOrCreate([
                     'name' => $key,
@@ -61,9 +62,9 @@ class Shopware5ShopDataSyncService implements ShopDataSyncServiceInterface
                     $data = $element;
                 }
 
-                $entity->allShopData()->create([
+                $entity->allShopData()->updateOrCreate([
                     'shop_id' => $shop->id,
-                    'content' => $data,
+                    'content' => (array)$data,
                 ]);
             });
         }

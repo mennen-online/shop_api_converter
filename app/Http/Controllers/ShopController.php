@@ -6,8 +6,10 @@ use App\Enums\Shop\ShopStatusEnum;
 use App\Enums\Shop\ShopTypeEnum;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
+use App\Jobs\ShopData\SyncShopDataJob;
 use App\Models\Shop;
 use App\Models\User;
+use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -168,6 +170,16 @@ class ShopController extends Controller
         return redirect()
             ->route('shops.edit', $shop)
             ->withSuccess(__('crud.common.saved'));
+    }
+
+    public function sync(Request $request, Shop $shop) {
+        SyncShopDataJob::dispatch($shop, new ShopDataSyncServiceEndpointLoader());
+
+        $shop->update([
+            'status' => ShopStatusEnum::QUEUED->value,
+        ]);
+
+        return to_route('shops.index');
     }
 
     /**
