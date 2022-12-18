@@ -7,16 +7,17 @@ import {Inertia} from "@inertiajs/inertia";
 import PrimaryButton from "../Components/PrimaryButton.vue";
 
 let showModal = ref(false);
-const selected_shopType = ref('')
 
 const form = reactive({
-  shopName: null,
-  shopUrl: null,
-  shopType: selected_shopType,
-  shopUsername: null,
-  shopApiToken: null,
-  shopClientID: null,
-  shopClientSecret: null
+  name: null,
+  url: null,
+  type: '',
+  credentials: {
+    username: null,
+    password: null,
+    client_id: null,
+    client_secret: null,
+  },
 });
 
 const props = defineProps(['shops'])
@@ -119,40 +120,40 @@ function syncShop(id) {
       <template #content>
         <form id="createShopForm" class="flex flex-col" @submit.prevent="submitForm">
           <label class="mb-2" for="shop_name">Shop name</label>
-          <input id="shop_name" v-model="form.shopName" class="mb-4 rounded-lg focus:ring-0 transition" required
+          <input id="shop_name" v-model="form.name" class="mb-4 rounded-lg focus:ring-0 transition" required
                  type="text">
           <label class="mb-2" for="shop_url">Shop URL</label>
-          <input id="shop_url" v-model="form.shopUrl" class="mb-4 rounded-lg focus:ring-0 transition" required
+          <input id="shop_url" v-model="form.url" class="mb-4 rounded-lg focus:ring-0 transition" required
                  type="url">
           <label class="mb-1" for="shop_type">Select Shop Type</label>
           <div class="flex flex-col mb-4">
             <div>
-              <input id="shopware6" v-model="selected_shopType" class="mr-2" name="shop_type" required type="radio"
+              <input id="shopware6" v-model="form.type" class="mr-2" name="shop_type" required type="radio"
                      value="shopware6">
               <label for="shopware6">Shopware 6</label>
             </div>
             <div>
-              <input id="shopware5" v-model="selected_shopType" class="mr-2" name="shop_type" required type="radio"
+              <input id="shopware5" v-model="form.type" class="mr-2" name="shop_type" required type="radio"
                      value="shopware5">
               <label for="shopware5">Shopware 5</label>
 
             </div>
           </div>
-          <h1 v-if="selected_shopType" class="font-bold text-2xl mb-2">Credentials</h1>
-          <div v-if="selected_shopType === 'shopware5'" class="flex flex-col">
+          <h1 v-if="form.type" class="font-bold text-2xl mb-2">Credentials</h1>
+          <div v-if="form.type === 'shopware5'" class="flex flex-col">
             <label class="mb-1" for="s5_username">Username</label>
-            <input id="s5_username" v-model="form.shopUsername" class="mb-4 rounded-lg focus:ring-0 transition" required
+            <input id="s5_username" v-model="form.credentials.username" class="mb-4 rounded-lg focus:ring-0 transition" required
                    type="text">
             <label class="mb-1" for="s5_apikey">API Key</label>
-            <input id="s5_apikey" v-model="form.shopApiToken" class="mb-4 rounded-lg focus:ring-0 transition" required
+            <input id="s5_apikey" v-model="form.credentials.password" class="mb-4 rounded-lg focus:ring-0 transition" required
                    type="text">
           </div>
-          <div v-if="selected_shopType === 'shopware6'" class="flex flex-col">
+          <div v-if="form.type === 'shopware6'" class="flex flex-col">
             <label class="mb-1" for="s6_id">Client ID</label>
-            <input id="s6_id" v-model="form.shopClientID" class="mb-4 rounded-lg focus:ring-0 transition" required
+            <input id="s6_id" v-model="form.credentials.client_id" class="mb-4 rounded-lg focus:ring-0 transition" required
                    type="text">
             <label class="mb-1" for="s6_secret">Client Secret</label>
-            <input id="s6_secret" v-model="form.shopClientSecret" class="mb-4 rounded-lg focus:ring-0 transition"
+            <input id="s6_secret" v-model="form.credentials.client_secret" class="mb-4 rounded-lg focus:ring-0 transition"
                    required type="text">
           </div>
         </form>

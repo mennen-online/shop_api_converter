@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Shop\ShopStatusEnum;
-use App\Enums\Shop\ShopTypeEnum;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Jobs\ShopData\SyncShopDataJob;
@@ -11,9 +10,6 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
 use Exception;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -46,35 +42,13 @@ class ShopController extends Controller
      * @param  ShopStoreRequest  $request
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(ShopStoreRequest $request)
     {
         $this->authorize('create', Shop::class);
 
-        $shopInfo = json_decode($request->getContent());
-
-        $shopType = null;
-        $credentials = null;
         $route = redirect()->route('shops.index');
 
-        switch ($shopInfo->shopType) {
-            case 'shopware5':
-                $shopType = ShopTypeEnum::SHOPWARE5->value;
-                $credentials = [
-                    'username' => $shopInfo->shopUsername,
-                    'password' => $shopInfo->shopApiToken,
-
-                ];
-                break;
-            case 'shopware6':
-                $shopType = ShopTypeEnum::SHOPWARE6->value;
-                $credentials = [
-                    'api_key' => $shopInfo->shopClientID,
-                    'api_secret' => $shopInfo->shopClientSecret,
-                ];
-                break;
-        }
-
-        if (Shop::where('url', $shopInfo->shopUrl)->exists()) {
+        if (Shop::where('url', $request->input('url'))->exists()) {
             return $route->with([
                 'message' => [
                     'title' => 'Error!',
@@ -84,15 +58,13 @@ class ShopController extends Controller
             ]);
         }
 
-        Shop::updateOrCreate(
-            [
-                'name' => $shopInfo->shopName,
-                'url' => $shopInfo->shopUrl,
-                'type' => $shopType,
-                'status' => ShopStatusEnum::NOT_SYNCED->value,
-                'user_id' => $request->user()->id,
-                'credentials' => $credentials,
-            ]
+        $request->user()->shop()->updateOrCreate(
+            array_merge(
+                $request->validated(),
+                [
+                    'status' => ShopStatusEnum::NOT_SYNCED->value,
+                ]
+            )
         );
 
         return $route->with([
@@ -102,19 +74,6 @@ class ShopController extends Controller
                 'type' => 'success',
             ],
         ]);
-    }
-
-    /**
-     * @param  Request  $request
-     * @return Application|Factory|View
-     */
-    public function create(Request $request)
-    {
-        $this->authorize('create', Shop::class);
-
-        $users = User::pluck('name', 'id');
-
-        return view('app.shops.create', compact('users'));
     }
 
     /**
