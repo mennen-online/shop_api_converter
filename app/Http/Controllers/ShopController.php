@@ -88,7 +88,7 @@ class ShopController extends Controller
 
             return Inertia::render('ShopsDetail', [
                 'header' => 'Shop Information',
-                'shop' => $shop->only('id', 'name', 'type', 'url', 'status', 'created_at', 'updated_at'),
+                'shop' => $shop->toArray(),
             ]);
         } catch (Exception $e) {
             Log::critical($e);
