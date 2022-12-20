@@ -48,16 +48,6 @@ class ShopController extends Controller
 
         $route = redirect()->route('shops.index');
 
-        if (Shop::where('url', $request->input('url'))->exists()) {
-            return $route->with([
-                'message' => [
-                    'title' => 'Error!',
-                    'text' => 'Shop creation failed!',
-                    'type' => 'error',
-                ],
-            ]);
-        }
-
         $request->user()->shop()->updateOrCreate(
             array_merge(
                 $request->validated(),

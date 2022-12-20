@@ -39,7 +39,7 @@ class ShopController extends Controller
 
         $validated = $request->validated();
 
-        $shop = Shop::create($validated);
+        $shop = $request->user()->shop()->create($validated);
 
         return new ShopResource($shop);
     }
