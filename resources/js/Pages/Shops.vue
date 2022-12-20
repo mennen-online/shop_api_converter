@@ -38,30 +38,47 @@ const statusBadges = {
 
 watch(search, async (newSearch, oldSearch) => {
   if (oldSearch !== newSearch) {
-    if(newSearch === '') {
-      Inertia.visit('/shops' + newSearch, {preserveState: true})
+    if (newSearch === '') {
+      Inertia.visit(route('shops.index'), {preserveState: true})
       return;
     }
 
-    Inertia.visit('/shops?search=' + newSearch, {preserveState: true})
+    Inertia.visit(route('shops.index', {
+      _query: {
+        search: newSearch
+      }
+    }), {preserveState: true})
 
   }
 })
 
 function submitForm() {
   showModal = false;
-  Inertia.post('/shops', form);
+  Inertia.post(route('shops.store'), form);
 }
 
 function nextPage() {
   if (currentPage !== lastPage) {
-    Inertia.visit('/shops?page=' + (currentPage + 1));
+    Inertia.visit(route('shops.index', {
+      _query: {
+        page: (currentPage + 1)
+      }
+    }));
   }
 }
 
 function prevPage() {
   if (currentPage > 1) {
-    Inertia.visit('/shops?page=' + (currentPage - 1));
+    if ((currentPage - 1) === 1) {
+      Inertia.visit(route('shops.index'))
+      return;
+    }
+
+    Inertia.visit(route('shops.index', {
+      _query: {
+        page: (currentPage - 1)
+      }
+    }));
   }
 }
 
@@ -111,7 +128,7 @@ function getStatus(shopStatus) {
 }
 
 function syncShop(id) {
-  Inertia.get('/shops/' + id + '/sync')
+  Inertia.get(route('shop.sync', id))
 }
 </script>
 
