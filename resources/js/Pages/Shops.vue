@@ -2,11 +2,13 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import {Link} from "@inertiajs/inertia-vue3";
 import DialogModal from "@/Components/DialogModal.vue";
-import {reactive, ref} from 'vue';
+import {reactive, ref, watch} from 'vue';
 import {Inertia} from "@inertiajs/inertia";
-import PrimaryButton from "../Components/PrimaryButton.vue";
+
 
 let showModal = ref(false);
+
+let search = ref('');
 
 const form = reactive({
   name: null,
@@ -27,12 +29,24 @@ const lastPage = props.shops['last_page'];
 
 const statusBadges = {
   'not_synced': 'bg-red-100 w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
-  'failed': 'bg-red-500 text-white font-extrabold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
-  'finished': 'bg-green-500 text-white font-extrabold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'failed': 'bg-red-500 text-white w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'finished': 'bg-green-500 text-white  w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
   'enqueued': 'bg-yellow-300 font-bold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
   'running': 'bg-green-300 font-bold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
   'unknown': 'bg-orange-200 font-bold w-32 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
 }
+
+watch(search, async (newSearch, oldSearch) => {
+  if (oldSearch !== newSearch) {
+    if(newSearch === '') {
+      Inertia.visit('/shops' + newSearch, {preserveState: true})
+      return;
+    }
+
+    Inertia.visit('/shops?search=' + newSearch, {preserveState: true})
+
+  }
+})
 
 function submitForm() {
   showModal = false;
@@ -194,7 +208,8 @@ function syncShop(id) {
                 </svg>
 
               </span>
-              <input class="appearance-none border-none py-4 px-2 focus:ring-0 h-6 text-sm" type="text">
+              <input v-model="search" class="appearance-none border-none py-4 px-2 focus:ring-0 h-6 text-sm"
+                     type="text">
             </div>
             <div class="flex flex-row justify-center items-center">
               <button @click="prevPage">
