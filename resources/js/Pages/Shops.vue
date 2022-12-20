@@ -26,12 +26,12 @@ const currentPage = props.shops['current_page'];
 const lastPage = props.shops['last_page'];
 
 const statusBadges = {
-  'not_synced': 'bg-red-100 w-24 text-sm px-2 py-1 rounded-xl text-center',
-  'failed': 'bg-red-500 text-white font-extrabold w-24 text-sm px-2 py-1 rounded-xl text-center',
-  'finished': 'bg-green-500 text-white font-extrabold w-24 text-sm px-2 py-1 rounded-xl text-center',
-  'enqueued': 'bg-yellow-300 font-bold w-24 text-sm px-2 py-1 rounded-xl text-center',
-  'running': 'bg-green-300 font-bold w-24 text-sm px-2 py-1 rounded-xl text-center',
-  'unknown': 'bg-orange-200 font-bold w-32 text-sm px-2 py-1 rounded-xl text-center',
+  'not_synced': 'bg-red-100 w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'failed': 'bg-red-500 text-white font-extrabold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'finished': 'bg-green-500 text-white font-extrabold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'enqueued': 'bg-yellow-300 font-bold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'running': 'bg-green-300 font-bold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'unknown': 'bg-orange-200 font-bold w-32 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
 }
 
 function submitForm() {
@@ -56,34 +56,40 @@ function getStatus(shopStatus) {
     case 'not_synced':
       return {
         status: 'Not synced',
+        resync: true,
         class: statusBadges.not_synced
       }
     case 'finished':
       return {
         status: 'Synced',
+        resync: true,
         class: statusBadges.finished
       }
     case 'queued': {
       return {
         status: 'Enqueued',
+        resync: false,
         class: statusBadges.enqueued
       }
     }
     case 'running': {
       return {
         status: 'Syncing',
+        resync: false,
         class: statusBadges.running
       }
     }
     case 'failed': {
       return {
         status: 'Sync failed',
+        resync: true,
         class: statusBadges.failed
       }
     }
     default: {
       return {
         status: 'Unknown Status',
+        resync: true,
         class: statusBadges.unknown
       }
     }
@@ -142,18 +148,22 @@ function syncShop(id) {
           <h1 v-if="form.type" class="font-bold text-2xl mb-2">Credentials</h1>
           <div v-if="form.type === 'shopware5'" class="flex flex-col">
             <label class="mb-1" for="s5_username">Username</label>
-            <input id="s5_username" v-model="form.credentials.username" class="mb-4 rounded-lg focus:ring-0 transition" required
+            <input id="s5_username" v-model="form.credentials.username" class="mb-4 rounded-lg focus:ring-0 transition"
+                   required
                    type="text">
             <label class="mb-1" for="s5_apikey">API Key</label>
-            <input id="s5_apikey" v-model="form.credentials.password" class="mb-4 rounded-lg focus:ring-0 transition" required
+            <input id="s5_apikey" v-model="form.credentials.password" class="mb-4 rounded-lg focus:ring-0 transition"
+                   required
                    type="text">
           </div>
           <div v-if="form.type === 'shopware6'" class="flex flex-col">
             <label class="mb-1" for="s6_id">Client ID</label>
-            <input id="s6_id" v-model="form.credentials.client_id" class="mb-4 rounded-lg focus:ring-0 transition" required
+            <input id="s6_id" v-model="form.credentials.client_id" class="mb-4 rounded-lg focus:ring-0 transition"
+                   required
                    type="text">
             <label class="mb-1" for="s6_secret">Client Secret</label>
-            <input id="s6_secret" v-model="form.credentials.client_secret" class="mb-4 rounded-lg focus:ring-0 transition"
+            <input id="s6_secret" v-model="form.credentials.client_secret"
+                   class="mb-4 rounded-lg focus:ring-0 transition"
                    required type="text">
           </div>
         </form>
@@ -288,15 +298,22 @@ function syncShop(id) {
                 <p>
                   {{ shop.created_at }}
                 </p>
-                <p>
-                  <primary-button type="button" v-on:click="syncShop(shop.id)">Resync</primary-button>
-                </p>
+
               </div>
-              <div :var="response = getStatus(shop.status)" class="">
+              <div :var="response = getStatus(shop.status)" class="flex flex-row justify-between items-center">
                 <div :class="response.class">
                   {{ response.status }}
                 </div>
-
+                <div v-if="response.resync"
+                     class="flex flex-row items-center bg-emerald-400 text-white pl-2 pr-3 py-1 rounded-lg font-bold">
+                  <svg class="w-5 h-5 mr-1.5" fill="currentColor" viewBox="0 0 20 20"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"
+                          fill-rule="evenodd"/>
+                  </svg>
+                  <button v-on:click="syncShop(shop.id)">Sync</button>
+                </div>
               </div>
             </div>
           </div>
