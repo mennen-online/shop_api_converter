@@ -50,6 +50,7 @@ class SyncShopDataJob implements ShouldQueue
             ->onQueue('sync')
             ->allowFailures()
             ->name($this->shop->name . ' Sync Batch')
+            ->onQueue('sync')
             ->finally(function() use($shop) {
             $shop->update([
                 'status' => ShopStatusEnum::FINISHED->value

@@ -55,6 +55,10 @@ class ShopTest extends TestCase
 
         unset($dbData['credentials']);
 
+        unset($dbData['summary']);
+
+        unset($dbData['entities']);
+
         $this->assertDatabaseHas('shops', $dbData);
 
         $response->assertStatus(201)->assertJsonFragment($dbData);

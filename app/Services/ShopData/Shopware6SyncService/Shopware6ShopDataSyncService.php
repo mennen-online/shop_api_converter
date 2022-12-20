@@ -2,16 +2,17 @@
 
 namespace App\Services\ShopData\Shopware6SyncService;
 
-use App\Exceptions\Shop\ShopSyncFailedException;
 use App\Models\Shop;
 use App\Services\Shop\Connector\ShopConnectorService;
 use App\Services\ShopData\ShopDataSyncServiceInterface;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use MennenOnline\Shopware6ApiConnector\Enums\EndpointEnum;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Shopware6ShopDataSyncService implements ShopDataSyncServiceInterface
 {
-    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, Collection $collection)
+    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, array $model)
     {
         $shopApiConnector = $shopConnectorService->getConnector($shop, collect(EndpointEnum::cases())->filter(
             function (EndpointEnum $endpointEnum) use ($endpoint) {
@@ -24,24 +25,27 @@ class Shopware6ShopDataSyncService implements ShopDataSyncServiceInterface
             'name' => $endpoint,
         ]);
 
-        $element = $collection->first();
-
-        if (! $element) {
-            throw new ShopSyncFailedException("First Element for $endpoint is null", 419);
-        }
-
-        collect(get_object_vars($element))->each(function ($value, $key) use ($entity) {
+        collect(array_keys($model))->each(function ($value, $key) use ($entity) {
             $entity->entityFields()->updateOrCreate([
                 'name' => $key,
             ]);
         });
 
-        $collection->each(function (object $element) use ($shopApiConnector, $shop, $entity) {
-            $data = $shopApiConnector->getSingle($element->id)->data;
-            $entity->allShopData()->create([
-                'shop_id' => $shop->id,
-                'content' => $data,
-            ]);
-        });
+        $attributes = $model;
+
+        $id = !Arr::has($attributes, 'id') ? Arr::get($attributes, 'key') : Arr::get($attributes, 'id');
+
+        try {
+            $data = $shopApiConnector->getSingle($id)->data;
+        } catch (NotFoundHttpException $exception) {
+            Log::warning("Fetching Single $endpoint Resource with ID $id failed - use Collection Data");
+
+            $data = $model;
+        }
+
+        $entity->allShopData()->updateOrCreate([
+            'shop_id' => $shop->id,
+            'content' => $data,
+        ]);
     }
 }

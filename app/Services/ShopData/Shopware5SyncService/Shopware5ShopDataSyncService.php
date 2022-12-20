@@ -2,19 +2,17 @@
 
 namespace App\Services\ShopData\Shopware5SyncService;
 
-use App\Exceptions\Shop\ShopSyncFailedException;
 use App\Models\Shop;
 use App\Services\Shop\Connector\ShopConnectorService;
 use App\Services\ShopData\ShopDataSyncServiceInterface;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use MennenOnline\LaravelResponseModels\Models\BaseModel;
 use MennenOnline\Shopware5ApiConnector\Enums\EndpointEnum;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Shopware5ShopDataSyncService implements ShopDataSyncServiceInterface
 {
-    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, Collection $collection)
+    public function __invoke(Shop $shop, ShopConnectorService $shopConnectorService, string $endpoint, array $model)
     {
         $shopApiConnector = $shopConnectorService->getConnector($shop, collect(EndpointEnum::cases())->filter(
             function (EndpointEnum $endpointEnum) use ($endpoint) {
@@ -27,46 +25,27 @@ class Shopware5ShopDataSyncService implements ShopDataSyncServiceInterface
             'name' => $endpoint,
         ]);
 
-        $element = $collection->first();
-
-        if (! $element) {
-            throw new ShopSyncFailedException("First Element for $endpoint is null", 419);
-        }
-
-        if (! is_object($element) && ! $element instanceof BaseModel) {
-            $collection->each(function ($value, $key) use ($entity) {
-                $entity->entityFields()->updateOrCreate([
-                    'name' => $key,
-                ]);
-            });
-
-            $entity->allShopData()->updateOrCreate([
-                'shop_id' => $shop->id,
-                'content' => $collection->toJson(),
+        collect(array_keys($model))->each(function ($value, $key) use ($entity) {
+            $entity->entityFields()->updateOrCreate([
+                'name' => $key,
             ]);
-        } else {
-            collect(get_object_vars($element))->each(function ($value, $key) use ($entity) {
-                $entity->entityFields()->updateOrCreate([
-                    'name' => $key,
-                ]);
-            });
+        });
 
-            $collection->each(function (object $element) use ($shopApiConnector, $shop, $entity, $endpoint) {
-                $id = ! property_exists($element, 'id') ? $element->key : $element->id;
+        $attributes = $model;
 
-                try {
-                    $data = $shopApiConnector->getSingle($id)->data;
-                } catch(NotFoundHttpException $exception) {
-                    Log::warning("Fetching Single $endpoint Resource with ID $id failed - use Collection Data");
+        $id = !Arr::has($attributes, 'id') ? Arr::get($attributes, 'key') : Arr::get($attributes, 'id');
 
-                    $data = $element;
-                }
+        try {
+            $data = $shopApiConnector->getSingle($id)->data;
+        } catch (NotFoundHttpException $exception) {
+            Log::warning("Fetching Single $endpoint Resource with ID $id failed - use Collection Data");
 
-                $entity->allShopData()->updateOrCreate([
-                    'shop_id' => $shop->id,
-                    'content' => (array)$data,
-                ]);
-            });
+            $data = $model;
         }
+
+        $entity->allShopData()->updateOrCreate([
+            'shop_id' => $shop->id,
+            'content' => $data,
+        ]);
     }
 }

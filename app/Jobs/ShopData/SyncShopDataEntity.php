@@ -4,16 +4,15 @@ namespace App\Jobs\ShopData;
 
 use App\Models\Shop;
 use App\Services\Shop\Connector\ShopConnectorService;
-use App\Services\ShopData\ShopDataSyncServiceLoader;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
-use MennenOnline\Shopware5ApiConnector\Exceptions\Connector\EmptyShopware5ResponseException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use MennenOnline\LaravelResponseModels\Models\BaseModel;
 
 class SyncShopDataEntity implements ShouldQueue
 {
@@ -40,21 +39,19 @@ class SyncShopDataEntity implements ShouldQueue
     {
         $connector = (new ShopConnectorService())->getConnector($this->shop, $this->endpoint);
 
-        try {
-            $collection = $connector->getAll(app()->environment('testing') ? 10 : null);
+        $collection = $connector->getAll(app()->environment('testing') ? 10 : null);
 
-            if ($collection->data) {
-                ((new ShopDataSyncServiceLoader())($this->shop))($this->shop, new ShopConnectorService(), $this->endpoint->name, $collection->data);
-            } else {
-                Log::info($this->endpoint->name.' Response Collection Empty', [
-                    'shop' => $this->shop,
-                ]);
-            }
-
-        } catch(NotFoundHttpException $exception) {
-            Log::warning('Endpoint '.$this->endpoint->name.' not found');
-        } catch(EmptyShopware5ResponseException $exception) {
-            Log::warning('Endpoint ' . $this->endpoint->name.' returned empty response');
+        if ($collection->data) {
+            $batch = $collection->data->map(fn(BaseModel $model) => new ProcessSingleShopDataEntity($this->shop, $this->endpoint, $model->getAttributes()));
+            Bus::batch($batch->toArray())
+                ->name($this->shop->name . ' Entity Processor for ' . $this->endpoint->name)
+                ->onQueue('sync')
+                ->allowFailures()
+                ->dispatch();
+        } else {
+            Log::info($this->endpoint->name.' Response Collection Empty', [
+                'shop' => $this->shop,
+            ]);
         }
     }
 }
