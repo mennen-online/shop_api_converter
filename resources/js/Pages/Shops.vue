@@ -28,7 +28,7 @@ const currentPage = props.shops['current_page'];
 const lastPage = props.shops['last_page'];
 
 const statusBadges = {
-  'not_synced': 'bg-red-100 w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
+  'not_synced': 'bg-slate-100 w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
   'failed': 'bg-red-500 text-white w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
   'finished': 'bg-green-500 text-white  w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
   'enqueued': 'bg-yellow-300 font-bold w-24 text-sm px-2 py-1.5 rounded-lg text-center font-bold',
@@ -214,7 +214,7 @@ function syncShop(id) {
 
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class=" overflow-hidden sm:rounded-lg">
-          <div class="flex flex-row mb-6 justify-between">
+          <div class="flex flex-row mb-6 justify-between px-2">
             <div
                 class="flex flex-row border rounded-xl overflow-hidden items-center bg-white text-gray-400 focus-within:text-gray-600 transition">
               <span class="ml-3">
@@ -295,10 +295,10 @@ function syncShop(id) {
             </button>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full px-2 pb-2">
 
             <div v-for="shop in shops.data"
-                 class="flex flex-col bg-white rounded-xl border h-52 w-72 p-4 hover:shadow transition gap-2 justify-between">
+                 class="flex flex-col bg-white rounded-xl transition hover:scale-105 border h-52 w-72 p-4 hover:shadow transition gap-2 justify-between">
               <div class="flex flex-row items-center">
                 <div class="h-7 w-7 text-gray-700 mr-3">
                   <svg v-if="shop.type === 'shopware6'" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg"
@@ -336,15 +336,15 @@ function syncShop(id) {
                 <div :class="response.class">
                   {{ response.status }}
                 </div>
-                <div v-if="response.resync"
-                     class="flex flex-row items-center bg-emerald-400 text-white pl-2 pr-3 py-1 rounded-lg font-bold">
+                <div v-if="response.resync" class="flex flex-row items-center cursor-pointer hover:bg-emerald-500 transition bg-emerald-400 text-white pl-2 pr-3 py-1 rounded-lg font-bold"
+                     @click="syncShop(shop.id)">
                   <svg class="w-5 h-5 mr-1.5" fill="currentColor" viewBox="0 0 20 20"
                        xmlns="http://www.w3.org/2000/svg">
                     <path clip-rule="evenodd"
                           d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z"
                           fill-rule="evenodd"/>
                   </svg>
-                  <button v-on:click="syncShop(shop.id)">Sync</button>
+                  <p>Sync</p>
                 </div>
               </div>
             </div>
