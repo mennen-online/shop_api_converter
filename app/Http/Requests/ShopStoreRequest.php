@@ -29,10 +29,11 @@ class ShopStoreRequest extends FormRequest
             'name' => ['required', 'max:255', 'string'],
             'type' => ['required', new Enum(ShopTypeEnum::class)],
             'url' => ['required', 'url'],
-            'credentials' => ['required', 'array', 'min:2', 'max:2'],
-            'credentials.api_key' => ['required', 'string', 'max:255'],
-            'credentials.api_secret' => ['required', 'string', 'max:255'],
-            'user_id' => ['required', 'exists:users,id'],
+            'credentials' => ['required', 'array'],
+            'credentials.username' => ['required_if:type,'.ShopTypeEnum::SHOPWARE5->value, 'nullable', 'string', 'max:255'],
+            'credentials.password' => ['required_if:type,'.ShopTypeEnum::SHOPWARE5->value, 'nullable', 'string', 'max:255'],
+            'credentials.client_id' => ['required_if:type,'.ShopTypeEnum::SHOPWARE6->value, 'nullable', 'string', 'max:255'],
+            'credentials.client_secret' => ['required_if:type,'.ShopTypeEnum::SHOPWARE6->value, 'nullable', 'string', 'max:255'],
         ];
     }
 }
