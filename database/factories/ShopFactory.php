@@ -28,10 +28,6 @@ class ShopFactory extends Factory
             'name' => Str::random(),
             'status' => ShopStatusEnum::NOT_SYNCED->value,
             'url' => $this->faker->url,
-            'credentials' => [
-                'api_key' => Str::random(),
-                'api_secret' => Str::random(),
-            ],
             'user_id' => \App\Models\User::factory(),
         ];
     }
@@ -41,6 +37,10 @@ class ShopFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'type' => ShopTypeEnum::SHOPWARE6->value,
+                'credentials' => [
+                    'api_key' => Str::random(),
+                    'api_secret' => Str::random(),
+                ]
             ];
         });
     }
@@ -50,6 +50,10 @@ class ShopFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'type' => ShopTypeEnum::SHOPWARE5->value,
+                'credentials' => [
+                    'username' => Str::random(),
+                    'password' => Str::random(),
+                ]
             ];
         });
     }

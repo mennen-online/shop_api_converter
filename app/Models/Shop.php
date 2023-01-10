@@ -21,6 +21,10 @@ class Shop extends Model
         'credentials' => 'encrypted:object',
     ];
 
+    protected $appends = [
+        'summary'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -39,5 +43,13 @@ class Shop extends Model
     public function entities(): HasMany
     {
         return $this->hasMany(Entity::class);
+    }
+
+    public function getSummaryAttribute(): array {
+        return $this->entities->mapWithKeys(function(Entity $entity) {
+            return [
+                str($entity->name)->title()->replace('_', ' ')->toString() => $this->allShopData()->byEntity($entity)->count()
+            ];
+        })->toArray();
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ShopControllerTest extends TestCase
@@ -47,20 +48,10 @@ class ShopControllerTest extends TestCase
 
         $response = $this->get(route('shops.index'));
 
-        $response
-            ->assertOk()
-            ->assertViewIs('app.shops.index')
-            ->assertViewHas('shops');
-    }
-
-    /**
-     * @test
-     */
-    public function it_displays_create_view_for_shop()
-    {
-        $response = $this->get(route('shops.create'));
-
-        $response->assertOk()->assertViewIs('app.shops.create');
+        $response->assertInertia(fn (Assert $page) => $page
+            ->component('Shops')
+            ->has('shops')
+        );
     }
 
     /**
@@ -69,6 +60,7 @@ class ShopControllerTest extends TestCase
     public function it_stores_the_shop()
     {
         $data = Shop::factory()->shopware6()
+            ->for(User::first())
             ->make()
             ->toArray();
 
@@ -76,47 +68,17 @@ class ShopControllerTest extends TestCase
 
         $response = $this->post(route('shops.store'), $data);
 
-        $data['credentials'] = $this->castToJson($data['credentials']);
+        unset($data['credentials']);
 
-        $dbData = $data;
-
-        unset($dbData['credentials']);
-
-        $this->assertDatabaseHas('shops', $dbData);
+        $this->assertDatabaseHas('shops', $data);
 
         $shop = Shop::latest('id')->first();
 
-        $response->assertRedirect(route('shops.edit', $shop));
-    }
+        $response->assertRedirect(route('shops.index'));
 
-    /**
-     * @test
-     */
-    public function it_displays_show_view_for_shop()
-    {
-        $shop = Shop::factory()->shopware6()->create();
-
-        $response = $this->get(route('shops.show', $shop));
-
-        $response
-            ->assertOk()
-            ->assertViewIs('app.shops.show')
-            ->assertViewHas('shop');
-    }
-
-    /**
-     * @test
-     */
-    public function it_displays_edit_view_for_shop()
-    {
-        $shop = Shop::factory()->shopware6()->create();
-
-        $response = $this->get(route('shops.edit', $shop));
-
-        $response
-            ->assertOk()
-            ->assertViewIs('app.shops.edit')
-            ->assertViewHas('shop');
+        $this->get(route('shops.index'))->assertInertia(fn (Assert $page) => $page
+            ->component('Shops')
+        );
     }
 
     /**

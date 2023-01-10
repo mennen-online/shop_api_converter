@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\ShopEndpointResourceController;
 use App\Http\Controllers\Api\ShopEndpointsController;
 use App\Http\Controllers\Api\ShopEntitiesController;
+use App\Http\Controllers\Api\ShopSyncController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

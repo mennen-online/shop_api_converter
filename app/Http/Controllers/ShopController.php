@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Shop\ShopStatusEnum;
 use App\Http\Requests\ShopStoreRequest;
 use App\Http\Requests\ShopUpdateRequest;
+use App\Jobs\ShopData\SyncShopDataJob;
 use App\Models\Shop;
 use App\Models\User;
+use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class ShopController extends Controller
 {
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @param  Request  $request
+     * @return \Inertia\Response
      */
     public function index(Request $request)
     {
@@ -22,58 +30,65 @@ class ShopController extends Controller
 
         $shops = Shop::search($search)
             ->latest()
-            ->paginate(5)
-            ->withQueryString();
+            ->orderBy('id')
+            ->select('id', 'name', 'type', 'url', 'status', 'created_at', 'updated_at')
+            ->paginate(12)
+            ->toArray();
 
-        return view('app.shops.index', compact('shops', 'search'));
+        return Inertia::render('Shops', ['shops' => $shops])->with(['shop']);
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-        $this->authorize('create', Shop::class);
-
-        $users = User::pluck('name', 'id');
-
-        return view('app.shops.create', compact('users'));
-    }
-
-    /**
-     * @param  \App\Http\Requests\ShopStoreRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param  ShopStoreRequest  $request
+     * @return RedirectResponse
      */
     public function store(ShopStoreRequest $request)
     {
         $this->authorize('create', Shop::class);
 
-        $validated = $request->validated();
+        $route = redirect()->route('shops.index');
 
-        $shop = Shop::create($validated);
+        $request->user()->shop()->updateOrCreate(
+            array_merge(
+                $request->validated(),
+                [
+                    'status' => ShopStatusEnum::NOT_SYNCED->value,
+                ]
+            )
+        );
 
-        return redirect()
-            ->route('shops.edit', $shop)
-            ->withSuccess(__('crud.common.created'));
+        return $route->with([
+            'message' => [
+                'title' => 'Success!',
+                'text' => 'Shop created successfully',
+                'type' => 'success',
+            ],
+        ]);
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  Shop  $shop
+     * @return \Inertia\Response
      */
     public function show(Request $request, Shop $shop)
     {
-        $this->authorize('view', $shop);
+        try {
+            $this->authorize('view', $shop);
 
-        return view('app.shops.show', compact('shop'));
+            return Inertia::render('ShopsDetail', [
+                'header' => 'Shop Information',
+                'shop' => $shop->toArray(),
+            ]);
+        } catch (Exception $e) {
+            Log::critical($e);
+        }
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  Shop  $shop
+     * @return Response
      */
     public function edit(Request $request, Shop $shop)
     {
@@ -85,9 +100,9 @@ class ShopController extends Controller
     }
 
     /**
-     * @param  \App\Http\Requests\ShopUpdateRequest  $request
-     * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @param  ShopUpdateRequest  $request
+     * @param  Shop  $shop
+     * @return Response
      */
     public function update(ShopUpdateRequest $request, Shop $shop)
     {
@@ -106,10 +121,20 @@ class ShopController extends Controller
             ->withSuccess(__('crud.common.saved'));
     }
 
+    public function sync(Request $request, Shop $shop) {
+        SyncShopDataJob::dispatch($shop, new ShopDataSyncServiceEndpointLoader());
+
+        $shop->update([
+            'status' => ShopStatusEnum::QUEUED->value,
+        ]);
+
+        return to_route('shops.index');
+    }
+
     /**
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Shop  $shop
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  Shop  $shop
+     * @return Response
      */
     public function destroy(Request $request, Shop $shop)
     {

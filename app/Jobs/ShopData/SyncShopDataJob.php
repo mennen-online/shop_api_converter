@@ -3,20 +3,15 @@
 namespace App\Jobs\ShopData;
 
 use App\Enums\Shop\ShopStatusEnum;
-use App\Exceptions\Shop\ShopSyncFailedException;
 use App\Models\Shop;
-use App\Services\Shop\Connector\ShopConnectorService;
 use App\Services\ShopData\ShopDataSyncServiceEndpointLoader;
-use App\Services\ShopData\ShopDataSyncServiceLoader;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
-use MennenOnline\Shopware6ApiConnector\Exceptions\Connector\EmptyShopware6ResponseException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SyncShopDataJob implements ShouldQueue
 {
@@ -46,34 +41,30 @@ class SyncShopDataJob implements ShouldQueue
             ]
         );
 
-        try {
-            foreach ($this->endpointLoader->getEndpointEnumCasesForShop($this->shop) as $endpoint) {
-                $connector = (new ShopConnectorService())->getConnector($this->shop, $endpoint);
+        $batch = collect($this->endpointLoader->getEndpointEnumCasesForShop($this->shop))
+            ->map(fn($endpoint) => new SyncShopDataEntity($this->shop, $endpoint));
 
-                try {
-                    $collection = $connector->getAll(app()->environment('testing') ? 10 : null);
-                } catch(NotFoundHttpException $exception) {
-                    Log::warning("Endpoint $endpoint->name not found");
+        $shop = $this->shop;
 
-                    continue;
-                }
-
-                if ($collection->data) {
-                    ((new ShopDataSyncServiceLoader())($this->shop))($this->shop, new ShopConnectorService(), $endpoint->name, $collection->data);
-                }
-            }
-        } catch(Exception|ShopSyncFailedException|EmptyShopware6ResponseException $exception) {
-            $this->shop->update([
-                'status' => ShopStatusEnum::FAILED->value,
+        Bus::batch($batch->toArray())
+            ->onQueue('sync')
+            ->allowFailures()
+            ->name($this->shop->name . ' Sync Batch')
+            ->onQueue('sync')
+            ->finally(function() use($shop) {
+            $shop->update([
+                'status' => ShopStatusEnum::FINISHED->value
             ]);
+        })->dispatch();
+    }
 
-            Log::critical('Shop Sync Failed', [
-                'exception' => $exception,
-            ]);
+    public function failed($exception) {
+        $this->shop->update([
+            'status' => ShopStatusEnum::FAILED->value,
+        ]);
 
-            $this->fail($exception);
-
-            throw $exception;
-        }
+        Log::critical('Shop Sync Failed', [
+            'exception' => $exception,
+        ]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ShopSyncController;
 use App\Http\Controllers\EndpointController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
@@ -36,10 +37,13 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
     Route::resources([
         'shops' => ShopController::class,
-        'endpoints' => EndpointController::class,
+        'shops.endpoints' => EndpointController::class,
         'permissions' => PermissionController::class,
         'roles' => RoleController::class,
     ]);
+
+    Route::get('/shops/{shop}/sync', [ShopController::class, 'sync'])->name('shop.sync');
 });

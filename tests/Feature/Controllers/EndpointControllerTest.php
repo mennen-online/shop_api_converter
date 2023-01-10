@@ -7,6 +7,7 @@ use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class EndpointControllerTest extends TestCase
@@ -29,16 +30,21 @@ class EndpointControllerTest extends TestCase
      */
     public function it_displays_index_view_with_endpoints()
     {
+        $shop = Shop::factory()
+            ->shopware5()
+            ->create();
         $endpoints = Endpoint::factory()
+            ->for($shop)
             ->count(5)
             ->create();
 
-        $response = $this->get(route('endpoints.index'));
+        $response = $this->get(route('shops.endpoints.index', ['shop' => $shop->id]));
 
         $response
             ->assertOk()
-            ->assertViewIs('app.endpoints.index')
-            ->assertViewHas('endpoints');
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('ShopsDetail')
+            );
     }
 
     /**
@@ -46,9 +52,11 @@ class EndpointControllerTest extends TestCase
      */
     public function it_displays_create_view_for_endpoint()
     {
-        $response = $this->get(route('endpoints.create'));
+        $shop = Shop::factory()->shopware6()->create();
+        $response = $this->get(route('shops.endpoints.create', ['shop' => $shop->id]));
 
-        $response->assertOk()->assertViewIs('app.endpoints.create');
+        $response->assertOk()
+            ->assertInertia(fn (Assert $page) => $page->component('ShopsDetail'));
     }
 
     /**
@@ -60,13 +68,13 @@ class EndpointControllerTest extends TestCase
             ->make()
             ->toArray();
 
-        $response = $this->post(route('endpoints.store'), $data);
+        $response = $this->post(route('shops.endpoints.store'), $data);
 
         $this->assertDatabaseHas('endpoints', $data);
 
         $endpoint = Endpoint::latest('id')->first();
 
-        $response->assertRedirect(route('endpoints.edit', $endpoint));
+        $response->assertRedirect(route('shops.endpoints.edit', $endpoint));
     }
 
     /**
@@ -76,7 +84,7 @@ class EndpointControllerTest extends TestCase
     {
         $endpoint = Endpoint::factory()->create();
 
-        $response = $this->get(route('endpoints.show', $endpoint));
+        $response = $this->get(route('shops.endpoints.show', $endpoint));
 
         $response
             ->assertOk()
@@ -91,7 +99,7 @@ class EndpointControllerTest extends TestCase
     {
         $endpoint = Endpoint::factory()->create();
 
-        $response = $this->get(route('endpoints.edit', $endpoint));
+        $response = $this->get(route('shops.endpoints.edit', $endpoint));
 
         $response
             ->assertOk()
@@ -116,13 +124,13 @@ class EndpointControllerTest extends TestCase
             'entity_field_id' => $endpoint->entity_field_id,
         ];
 
-        $response = $this->put(route('endpoints.update', $endpoint), $data);
+        $response = $this->put(route('shops.endpoints.update', $endpoint), $data);
 
         $data['id'] = $endpoint->id;
 
         $this->assertDatabaseHas('endpoints', $data);
 
-        $response->assertRedirect(route('endpoints.edit', $endpoint));
+        $response->assertRedirect(route('shops.endpoints.edit', $endpoint));
     }
 
     /**
@@ -132,9 +140,9 @@ class EndpointControllerTest extends TestCase
     {
         $endpoint = Endpoint::factory()->create();
 
-        $response = $this->delete(route('endpoints.destroy', $endpoint));
+        $response = $this->delete(route('shops.endpoints.destroy', $endpoint));
 
-        $response->assertRedirect(route('endpoints.index'));
+        $response->assertRedirect(route('shops.endpoints.index'));
 
         $this->assertModelMissing($endpoint);
     }

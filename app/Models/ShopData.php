@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\Searchable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +23,10 @@ class ShopData extends Model
     protected $casts = [
         'content' => 'object',
     ];
+
+    public function scopeByEntity(Builder $builder, Entity $entity) {
+        return $builder->where('entity_id', $entity->id);
+    }
 
     public function entity(): BelongsTo
     {

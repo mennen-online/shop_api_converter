@@ -41,18 +41,21 @@ const logout = () => {
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationMark class="block h-9 w-auto" />
-                                </Link>
-                            </div>
+                          <div class="shrink-0 flex items-center">
+                            <Link :href="route('dashboard')">
+                              <ApplicationMark class="block h-9 w-auto" />
+                            </Link>
+                          </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </NavLink>
-                            </div>
+                          <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                              Dashboard
+                            </NavLink>
+                            <NavLink :href="route('shops.index')" :active="route().current('shops.*')">
+                              Shops
+                            </NavLink>
+                          </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -211,6 +214,9 @@ const logout = () => {
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
+                      <ResponsiveNavLink :href="route('shops.index')" :active="route().current('shops.index')">
+                        Shops
+                      </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
