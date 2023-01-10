@@ -1,6 +1,6 @@
 <template>
   <nav class="w-1/6">
-    <Link class="flex flex-row items-center rounded px-2 py-1 mb-3 w-full" :href="route('shops.show', shop.id)" :class="isActive(route().current('shops.show', shop.id))">
+    <Link class="flex flex-row items-center rounded px-2 py-1 mb-2 w-full" :href="route('shops.show', shop.id)" :class="isActive(route().current('shops.show', shop.id))">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
            stroke="currentColor" class="w-5 h-5 mr-3">
         <path stroke-linecap="round" stroke-linejoin="round"

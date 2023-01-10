@@ -24,7 +24,7 @@ const form = reactive({
 
 const props = defineProps(['shops'])
 
-const currentPage = props.shops['current_page'];
+let currentPage = props.shops['current_page'];
 const lastPage = props.shops['last_page'];
 
 const statusBadges = {
@@ -40,8 +40,11 @@ watch(search, async (newSearch, oldSearch) => {
   if (oldSearch !== newSearch) {
     if (newSearch === '') {
       Inertia.visit(route('shops.index'), {preserveState: true})
+      currentPage = 1;
       return;
     }
+
+    currentPage = 1;
 
     Inertia.visit(route('shops.index', {
       _query: {
@@ -216,7 +219,7 @@ function syncShop(id) {
         <div class=" overflow-hidden sm:rounded-lg">
           <div class="flex flex-row mb-6 justify-between px-2">
             <div
-                class="flex flex-row border rounded-xl overflow-hidden items-center bg-white text-gray-400 focus-within:text-gray-600 transition">
+                class="flex flex-row border rounded-xl overflow-hidden items-center bg-white text-gray-400 focus-within:text-gray-600 transition focus-within:shadow">
               <span class="ml-3">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path clip-rule="evenodd"
@@ -228,7 +231,7 @@ function syncShop(id) {
               <input v-model="search" class="appearance-none border-none py-4 px-2 focus:ring-0 h-6 text-sm"
                      type="text">
             </div>
-            <div class="flex flex-row justify-center items-center">
+            <div class="flex flex-row justify-center items-center text-gray-500 hover:text-black transition">
               <button @click="prevPage">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5"
                      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -246,7 +249,7 @@ function syncShop(id) {
             </div>
             <div>
 
-              <button class="bg-white flex flex-row font-semibold py-2 px-4 rounded-lg border" @click="showModal = true"
+              <button class="bg-white flex flex-row font-semibold py-2 px-4 rounded-lg border hover:bg-violet-500 transition hover:text-white hover:shadow" @click="showModal = true"
                       @close="showModal = false">
                   <span class="mr-2">
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
